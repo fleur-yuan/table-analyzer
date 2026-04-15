@@ -23,7 +23,14 @@
   .upload-zone .hint { color: #666; font-size: 14px; }
   .upload-zone .hint strong { color: #4f8ef7; }
   #file-input { display: none; }
-  .file-loaded { margin-top: 10px; font-size: 13px; color: #52c41a; font-weight: 500; }
+
+  /* File list */
+  .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .file-item { display: flex; align-items: center; gap: 8px; background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+  .file-item .fname { flex: 1; font-weight: 500; color: #2d6a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item .fstatus { color: #52c41a; font-size: 12px; white-space: nowrap; }
+  .file-item .btn-remove { background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1; }
+  .file-item .btn-remove:hover { color: #f00; }
 
   /* Config row */
   .cfg-row { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -65,7 +72,11 @@
   .dim-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 
   /* Result */
-  .result-meta { font-size: 13px; color: #888; margin-bottom: 14px; }
+  .result-block { margin-bottom: 28px; }
+  .result-block-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .result-block-title { font-size: 15px; font-weight: 700; color: #333; }
+  .result-block-subtitle { font-size: 12px; color: #888; margin-top: 2px; }
+  .result-divider { height: 1px; background: #eef0f4; margin: 20px 0; }
   table.result-tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
   table.result-tbl th { background: #f0f4ff; padding: 10px 14px; text-align: left; font-weight: 600; border-bottom: 2px solid #d8e2ff; }
   table.result-tbl td { padding: 9px 14px; border-bottom: 1px solid #f0f0f0; }
@@ -81,7 +92,7 @@
   .r3 { background: #cd7f32; color: #fff; }
   .r0 { background: #eee; color: #888; }
 
-  .result-actions { display: flex; gap: 8px; margin-bottom: 14px; }
+  .result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .info-box { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #7a5f00; margin-bottom: 14px; }
   .success-box { background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #3a7d0a; margin-bottom: 14px; }
@@ -97,12 +108,21 @@
   .pool-chip { padding: 4px 10px; border-radius: 14px; font-size: 12px; border: 1.5px solid #d0d7de; background: #fff; cursor: pointer; color: #555; transition: all .12s; }
   .pool-chip:hover { border-color: #4f8ef7; color: #4f8ef7; }
   .pool-chip.used { opacity: .35; cursor: default; text-decoration: line-through; }
+
+  /* file color chips */
+  .file-color { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; }
+  .result-block:nth-child(3n+1) table.result-tbl th { background: #f0f4ff; border-bottom-color: #d8e2ff; }
+  .result-block:nth-child(3n+2) table.result-tbl th { background: #fff7e6; border-bottom-color: #ffd591; }
+  .result-block:nth-child(3n+3) table.result-tbl th { background: #f6ffed; border-bottom-color: #b7eb8f; }
+  .result-block:nth-child(3n+1) .bar { background: #4f8ef7; }
+  .result-block:nth-child(3n+2) .bar { background: #fa8c16; }
+  .result-block:nth-child(3n+3) .bar { background: #52c41a; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>表格统计分析器</h1>
-  <p class="subtitle">上传 Excel，自动识别合并表头结构，统计各维度考频与占比</p>
+  <p class="subtitle">支持多文件同时上传，自动识别合并表头，统计各维度考频与占比</p>
 
   <!-- Step 1 -->
   <div class="card">
@@ -110,16 +130,20 @@
     <h2>上传 Excel 文件</h2>
     <div class="upload-zone" id="upload-zone">
       <div class="icon">📊</div>
-      <div class="hint">拖入 <strong>.xlsx / .xls</strong> 文件，或点击选择</div>
-      <div class="file-loaded hidden" id="file-loaded">✓ 文件已加载</div>
+      <div class="hint">拖入 <strong>.xlsx / .xls</strong> 文件，或点击选择（支持多选）</div>
     </div>
-    <input type="file" id="file-input" accept=".xlsx,.xls">
+    <input type="file" id="file-input" accept=".xlsx,.xls" multiple>
+    <div class="file-list" id="file-list"></div>
+    <div id="step1-next-wrap" class="hidden" style="margin-top:14px;">
+      <button class="btn btn-primary" onclick="showStep2()">下一步：确认表格结构</button>
+    </div>
   </div>
 
   <!-- Step 2 -->
   <div class="card hidden" id="step2-card">
     <div class="step-label">Step 2</div>
     <h2>确认表格结构</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:14px;">以下设置将应用到所有已上传的文件（假设结构相同）。</p>
 
     <div class="cfg-row">
       <div class="cfg-item">
@@ -133,7 +157,7 @@
       <button class="btn btn-secondary btn-sm" onclick="refreshPreview()">刷新预览</button>
     </div>
 
-    <div class="section-title">数据预览（前5行）</div>
+    <div class="section-title">数据预览（第一个文件，前5行）</div>
     <div id="preview-wrap" class="preview-wrap"></div>
 
     <div class="divider"></div>
@@ -169,10 +193,8 @@
   <div class="card hidden" id="step4-card">
     <div class="step-label">统计结果</div>
     <h2 id="result-title"></h2>
-    <div class="result-actions">
-      <button class="btn btn-secondary btn-sm" onclick="copyResult()">复制表格</button>
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('step3-card').scrollIntoView({behavior:'smooth'})">返回修改</button>
-      <button class="btn btn-primary btn-sm" onclick="openInChartGenerator()">在图表生成器中打开 →</button>
     </div>
     <div id="result-wrap"></div>
   </div>
@@ -182,11 +204,10 @@
 
 <script>
 // ─── State ───────────────────────────────────────────────
-let rawSheet = null;       // XLSX sheet object
-let sheetData = [];        // array of row arrays (raw, no fill)
-let merges = [];           // [{s:{r,c}, e:{r,c}}]
-let dims = [];             // [{name, cols:[colIndex,...]}]
-let totalRows = 0;
+// Multi-file state: array of { name, rawSheet, sheetData, merges }
+let files = [];
+// Shared config (applied to all files)
+let dims = [];
 
 // ─── Upload ──────────────────────────────────────────────
 const uz = document.getElementById('upload-zone');
@@ -194,50 +215,100 @@ const fi = document.getElementById('file-input');
 uz.onclick = () => fi.click();
 uz.ondragover = e => { e.preventDefault(); uz.classList.add('drag-over'); };
 uz.ondragleave = () => uz.classList.remove('drag-over');
-uz.ondrop = e => { e.preventDefault(); uz.classList.remove('drag-over'); if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); };
-fi.onchange = e => { if (e.target.files[0]) loadFile(e.target.files[0]); };
+uz.ondrop = e => {
+  e.preventDefault();
+  uz.classList.remove('drag-over');
+  const dropped = Array.from(e.dataTransfer.files).filter(f => /\.xlsx?$/i.test(f.name));
+  if (dropped.length) loadFiles(dropped);
+};
+fi.onchange = e => {
+  const selected = Array.from(e.target.files);
+  if (selected.length) loadFiles(selected);
+  fi.value = '';
+};
 
-function loadFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: false });
-    rawSheet = wb.Sheets[wb.SheetNames[0]];
-    // Get raw data WITHOUT filling merged cells (defval null, no fill)
-    sheetData = XLSX.utils.sheet_to_json(rawSheet, { header: 1, defval: null, raw: true });
-    // Get merge info
-    merges = rawSheet['!merges'] || [];
-    document.getElementById('file-loaded').textContent = '✓ 已加载：' + file.name;
-    document.getElementById('file-loaded').classList.remove('hidden');
-    document.getElementById('step2-card').classList.remove('hidden');
-    refreshPreview();
-  };
-  reader.readAsArrayBuffer(file);
+function loadFiles(newFiles) {
+  newFiles.forEach(file => {
+    // skip duplicates by name
+    if (files.some(f => f.name === file.name)) return;
+    const entry = { name: file.name, rawSheet: null, sheetData: [], merges: [], loaded: false };
+    files.push(entry);
+    renderFileList();
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: false });
+      entry.rawSheet = wb.Sheets[wb.SheetNames[0]];
+      entry.sheetData = XLSX.utils.sheet_to_json(entry.rawSheet, { header: 1, defval: null, raw: true });
+      entry.merges = entry.rawSheet['!merges'] || [];
+      entry.loaded = true;
+      renderFileList();
+      checkAllLoaded();
+    };
+    reader.readAsArrayBuffer(file);
+  });
 }
 
-// ─── Step 2: Preview ─────────────────────────────────────
+function removeFile(idx) {
+  files.splice(idx, 1);
+  renderFileList();
+  if (files.length === 0) {
+    document.getElementById('step1-next-wrap').classList.add('hidden');
+    document.getElementById('step2-card').classList.add('hidden');
+    document.getElementById('step3-card').classList.add('hidden');
+    document.getElementById('step4-card').classList.add('hidden');
+  }
+}
+
+function renderFileList() {
+  const list = document.getElementById('file-list');
+  list.innerHTML = '';
+  files.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML = `
+      <span class="fname">${esc(f.name)}</span>
+      <span class="fstatus">${f.loaded ? '✓ 已加载' : '加载中…'}</span>
+      <button class="btn-remove" onclick="removeFile(${i})" title="移除">×</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function checkAllLoaded() {
+  if (files.length > 0 && files.every(f => f.loaded)) {
+    document.getElementById('step1-next-wrap').classList.remove('hidden');
+  }
+}
+
+function showStep2() {
+  if (files.length === 0) { showToast('请先上传文件'); return; }
+  document.getElementById('step2-card').classList.remove('hidden');
+  document.getElementById('step2-card').scrollIntoView({ behavior: 'smooth' });
+  refreshPreview();
+}
+
+// ─── Step 2: Preview (uses first file) ───────────────────
 function getHeaderRows() { return parseInt(document.getElementById('header-rows').value) || 2; }
-function getNameCol() { return parseInt(document.getElementById('name-col').value) - 1; }
+function getNameCol()    { return parseInt(document.getElementById('name-col').value) - 1; }
+
+// Return sheetData/merges for the primary file (first)
+function primaryData() { return files[0] || { sheetData: [], merges: [] }; }
 
 function refreshPreview() {
+  const { sheetData, merges: fileMerges } = primaryData();
   const hRows = getHeaderRows();
   const nameCol = getNameCol();
   const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
-  totalRows = dataRows.length;
-
-  // Build preview table (header + first 5 data rows)
-  const numCols = Math.max(...sheetData.slice(0, hRows).map(r => (r||[]).length));
-  // Compute effective headers using merged cells
-  const headers = getEffectiveHeaders();
+  const total = dataRows.length;
+  const numCols = Math.max(...sheetData.slice(0, hRows).map(r => (r||[]).length), 0);
 
   let html = '<table><thead>';
-  // Show raw header rows
   for (let hr = 0; hr < hRows; hr++) {
     html += '<tr>';
     for (let c = 0; c < numCols; c++) {
       const v = (sheetData[hr]||[])[c];
-      // Check if this cell is top-left of a merge
-      const mspan = getMergeSpan(hr, c);
-      if (mspan === null) continue; // skip merged cells that aren't top-left
+      const mspan = getMergeSpanFor(fileMerges, hr, c);
+      if (mspan === null) continue;
       html += `<th colspan="${mspan.colspan}" rowspan="${mspan.rowspan}">${v !== null && v !== undefined ? esc(String(v)) : ''}</th>`;
     }
     html += '</tr>';
@@ -255,29 +326,31 @@ function refreshPreview() {
   document.getElementById('preview-wrap').innerHTML = html;
 
   const sumEl = document.getElementById('parse-summary');
-  sumEl.textContent = `识别到 ${totalRows} 行数据，${numCols} 列`;
+  const allInfo = files.map(f => {
+    const dr = f.sheetData.slice(hRows).filter(r => r && getCellValue(r, getNameCol()) !== null).length;
+    return `${esc(f.name)}（${dr} 行）`;
+  }).join('　');
+  sumEl.innerHTML = `识别到 <strong>${files.length} 个文件</strong>：${allInfo}`;
   sumEl.classList.remove('hidden');
 }
 
-// ─── Merge helpers ───────────────────────────────────────
-// Returns {colspan, rowspan} if cell (r,c) is the top-left of a merge, else returns {colspan:1,rowspan:1}
-// Returns null if cell is inside a merge (not top-left)
-function getMergeSpan(r, c) {
-  for (const m of merges) {
+// ─── Merge helpers (takes explicit merges array) ─────────
+function getMergeSpanFor(mergesArr, r, c) {
+  for (const m of mergesArr) {
     if (m.s.r === r && m.s.c === c) return { colspan: m.e.c - m.s.c + 1, rowspan: m.e.r - m.s.r + 1 };
-    if (r >= m.s.r && r <= m.e.r && c >= m.s.c && c <= m.e.c) return null; // inside merge, not top-left
+    if (r >= m.s.r && r <= m.e.r && c >= m.s.c && c <= m.e.c) return null;
   }
   return { colspan: 1, rowspan: 1 };
 }
 
-// For a given column index, return the "effective" header label:
-// walk upward through header rows and find the merge group label that covers this column
-function getEffectiveHeaders() {
+// Legacy wrappers for primary file
+function getMergeSpan(r, c) { return getMergeSpanFor(primaryData().merges, r, c); }
+
+function getEffectiveHeadersFor(sheetData, mergesArr) {
   const hRows = getHeaderRows();
   const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
   const labels = [];
   for (let c = 0; c < numCols; c++) {
-    // First try: exact cell value in the last header row
     let label = null;
     for (let r = hRows - 1; r >= 0; r--) {
       const v = (sheetData[r]||[])[c];
@@ -286,9 +359,8 @@ function getEffectiveHeaders() {
         break;
       }
     }
-    // If still null, find a merge that covers this column in any header row
     if (label === null) {
-      outer: for (const m of merges) {
+      outer: for (const m of mergesArr) {
         if (m.e.r < hRows && c >= m.s.c && c <= m.e.c) {
           const v = (sheetData[m.s.r]||[])[m.s.c];
           if (v !== null && v !== undefined) { label = String(v).trim(); break outer; }
@@ -300,14 +372,15 @@ function getEffectiveHeaders() {
   return labels;
 }
 
-// Get top-level group label for a column (from first header row, following merges)
-function getTopLevelLabel(colIdx) {
-  const hRows = getHeaderRows();
-  // Check row 0 first
+function getEffectiveHeaders() {
+  const { sheetData, merges: fileMerges } = primaryData();
+  return getEffectiveHeadersFor(sheetData, fileMerges);
+}
+
+function getTopLevelLabelFor(sheetData, mergesArr, colIdx) {
   const v0 = (sheetData[0]||[])[colIdx];
   if (v0 !== null && v0 !== undefined && String(v0).trim() !== '') return String(v0).trim();
-  // Find merge that covers (row=0, col=colIdx)
-  for (const m of merges) {
+  for (const m of mergesArr) {
     if (m.s.r === 0 && colIdx >= m.s.c && colIdx <= m.e.c) {
       const mv = (sheetData[0]||[])[m.s.c];
       if (mv !== null && mv !== undefined) return String(mv).trim();
@@ -324,9 +397,9 @@ function getCellValue(row, c) {
   return v;
 }
 
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ─── Step 3: Auto-group ──────────────────────────────────
+// ─── Step 3: Auto-group (uses primary file) ──────────────
 function goStep3() {
   autoGroup();
   document.getElementById('step3-card').classList.remove('hidden');
@@ -334,18 +407,18 @@ function goStep3() {
 }
 
 function autoGroup() {
+  const { sheetData, merges: fileMerges } = primaryData();
   const hRows = getHeaderRows();
   const nameCol = getNameCol();
   const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
-  const subHeaders = getEffectiveHeaders();
+  const subHeaders = getEffectiveHeadersFor(sheetData, fileMerges);
 
-  // Strategy: group by top-level label (row 0, respecting merges)
-  const groupMap = {}; // label -> [colIndices]
+  const groupMap = {};
   const ungrouped = [];
 
   for (let c = 0; c < numCols; c++) {
     if (c === nameCol) continue;
-    const topLabel = getTopLevelLabel(c);
+    const topLabel = getTopLevelLabelFor(sheetData, fileMerges, c);
     if (topLabel) {
       if (!groupMap[topLabel]) groupMap[topLabel] = [];
       groupMap[topLabel].push(c);
@@ -354,18 +427,15 @@ function autoGroup() {
     }
   }
 
-  // If no top-level grouping found, fall back to individual columns
   dims = [];
   if (Object.keys(groupMap).length > 0) {
     for (const [label, cols] of Object.entries(groupMap)) {
       dims.push({ name: label, cols: [...cols] });
     }
-    // Ungrouped columns each become their own dim
     ungrouped.forEach(c => dims.push({ name: subHeaders[c], cols: [c] }));
     document.getElementById('auto-detect-info').innerHTML =
       `⚡ 自动识别到 <strong>${dims.length} 个维度</strong>（根据合并表头分组）。可在下方调整名称或列的归属。`;
   } else {
-    // No merges found, treat each column as its own dimension
     for (let c = 0; c < numCols; c++) {
       if (c === nameCol) continue;
       dims.push({ name: subHeaders[c], cols: [c] });
@@ -378,14 +448,13 @@ function autoGroup() {
 }
 
 function renderDims() {
-  const subHeaders = getEffectiveHeaders();
+  const { sheetData, merges: fileMerges } = primaryData();
+  const subHeaders = getEffectiveHeadersFor(sheetData, fileMerges);
   const nameCol = getNameCol();
   const numCols = Math.max(...sheetData.slice(0, getHeaderRows() + 1).map(r => (r||[]).length), 0);
 
-  // Compute which cols are assigned
   const assigned = new Set(dims.flatMap(d => d.cols));
 
-  // Render pool
   const pool = document.getElementById('cols-pool');
   pool.innerHTML = '';
   for (let c = 0; c < numCols; c++) {
@@ -394,13 +463,10 @@ function renderDims() {
     chip.className = 'pool-chip' + (assigned.has(c) ? ' used' : '');
     chip.textContent = subHeaders[c];
     chip.dataset.col = c;
-    if (!assigned.has(c)) {
-      chip.onclick = () => assignToLastDim(c);
-    }
+    if (!assigned.has(c)) chip.onclick = () => assignToLastDim(c);
     pool.appendChild(chip);
   }
 
-  // Render dims
   const grid = document.getElementById('dim-grid');
   grid.innerHTML = '';
   dims.forEach((d, di) => {
@@ -423,7 +489,6 @@ function renderDims() {
 
     const chips = document.createElement('div');
     chips.className = 'col-chips';
-    // Show all non-name cols as chips, highlight the ones in this dim
     for (let c = 0; c < numCols; c++) {
       if (c === nameCol) continue;
       const chip = document.createElement('span');
@@ -434,7 +499,6 @@ function renderDims() {
         if (d.cols.includes(c)) {
           dims[di].cols = dims[di].cols.filter(x => x !== c);
         } else {
-          // Remove from other dims
           dims.forEach((od, oi) => { if (oi !== di) dims[oi].cols = od.cols.filter(x => x !== c); });
           dims[di].cols.push(c);
         }
@@ -462,92 +526,137 @@ function addDim() {
   renderDims();
 }
 
-// ─── Step 4: Analyze ─────────────────────────────────────
+// ─── Step 4: Analyze all files ───────────────────────────
 function analyze() {
-  const hRows = getHeaderRows();
-  const nameCol = getNameCol();
-  const subHeaders = getEffectiveHeaders();
-
-  const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
-  const total = dataRows.length;
-
-  if (total === 0) { showToast('未找到数据行，请检查"表头共几行"设置'); return; }
   if (dims.length === 0) { showToast('请至少添加一个统计维度'); return; }
 
-  // Build results: each dim gets a count + sub-col counts
-  const results = dims
-    .filter(d => d.cols.length > 0)
-    .map(d => {
-      const count = dataRows.filter(row => d.cols.some(c => getCellValue(row, c) !== null)).length;
-      // Sub-column counts (only show if dim has >1 col)
-      const subs = d.cols.length > 1
-        ? d.cols.map(c => ({
-            name: subHeaders[c] || ('列' + (c + 1)),
-            count: dataRows.filter(row => getCellValue(row, c) !== null).length
-          }))
-        : [];
-      return { name: d.name, count, subs };
-    })
-    .sort((a, b) => b.count - a.count);
+  const wrap = document.getElementById('result-wrap');
+  wrap.innerHTML = '';
 
-  document.getElementById('result-title').textContent = `共 ${total} 份试卷，各维度考频统计`;
+  let anyData = false;
 
-  const maxCount = results[0]?.count || 1;
-  let html = `<table class="result-tbl" id="rtbl"><thead><tr>
-    <th>排名</th><th>维度</th><th>考查套数</th><th>考频</th><th>可视化</th>
-  </tr></thead><tbody>`;
+  files.forEach((fileEntry, fi) => {
+    const { sheetData } = fileEntry;
+    const hRows = getHeaderRows();
+    const nameCol = getNameCol();
+    const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
+    const total = dataRows.length;
+    if (total === 0) return;
+    anyData = true;
 
-  results.forEach((r, i) => {
-    const pct = (r.count / total * 100).toFixed(1);
-    const bw = Math.round(r.count / maxCount * 150);
-    const rc = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'r0';
-    // Main row
-    html += `<tr style="background:#fff;">
-      <td><span class="rank-badge ${rc}">${i + 1}</span></td>
-      <td><strong>${esc(r.name)}</strong></td>
-      <td>${r.count} / ${total}</td>
-      <td>${pct}%</td>
-      <td><div class="bar-wrap"><div class="bar" style="width:${bw}px"></div><span class="pct">${pct}%</span></div></td>
-    </tr>`;
-    // Sub rows
-    r.subs.forEach(s => {
-      const sp = (s.count / total * 100).toFixed(1);
-      const sbw = Math.round(s.count / maxCount * 150);
-      html += `<tr style="background:#f9faff;">
-        <td></td>
-        <td style="padding-left:28px;color:#666;font-size:13px;">└ ${esc(s.name)}</td>
-        <td style="color:#666;font-size:13px;">${s.count} / ${total}</td>
-        <td style="color:#666;font-size:13px;">${sp}%</td>
-        <td><div class="bar-wrap"><div class="bar" style="width:${sbw}px;background:#a0bffa;height:6px;"></div><span class="pct">${sp}%</span></div></td>
+    const results = dims
+      .filter(d => d.cols.length > 0)
+      .map(d => {
+        const count = dataRows.filter(row => d.cols.some(c => getCellValue(row, c) !== null)).length;
+        const subs = d.cols.length > 1
+          ? d.cols.map(c => ({
+              name: (getEffectiveHeadersFor(sheetData, fileEntry.merges)[c]) || ('列' + (c + 1)),
+              count: dataRows.filter(row => getCellValue(row, c) !== null).length
+            }))
+          : [];
+        return { name: d.name, count, subs };
+      })
+      .sort((a, b) => b.count - a.count);
+
+    const maxCount = results[0]?.count || 1;
+    const tblId = 'rtbl-' + fi;
+
+    const block = document.createElement('div');
+    block.className = 'result-block';
+
+    // Header row with title + actions
+    const blockHeader = document.createElement('div');
+    blockHeader.className = 'result-block-header';
+
+    const titleWrap = document.createElement('div');
+    titleWrap.innerHTML = `
+      <div class="result-block-title">${esc(fileEntry.name)}</div>
+      <div class="result-block-subtitle">共 ${total} 份试卷</div>
+    `;
+    blockHeader.appendChild(titleWrap);
+
+    const actionsWrap = document.createElement('div');
+    actionsWrap.className = 'result-actions';
+    actionsWrap.innerHTML = `
+      <button class="btn btn-secondary btn-sm" onclick="copyResult('${tblId}')">复制表格</button>
+      <button class="btn btn-primary btn-sm" onclick="openInChartGenerator(${fi})">在图表生成器中打开 →</button>
+    `;
+    blockHeader.appendChild(actionsWrap);
+    block.appendChild(blockHeader);
+
+    // Table
+    let html = `<table class="result-tbl" id="${tblId}"><thead><tr>
+      <th>排名</th><th>维度</th><th>考查套数</th><th>考频</th><th>可视化</th>
+    </tr></thead><tbody>`;
+
+    results.forEach((r, i) => {
+      const pct = (r.count / total * 100).toFixed(1);
+      const bw = Math.round(r.count / maxCount * 150);
+      const rc = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'r0';
+      html += `<tr style="background:#fff;">
+        <td><span class="rank-badge ${rc}">${i + 1}</span></td>
+        <td><strong>${esc(r.name)}</strong></td>
+        <td>${r.count} / ${total}</td>
+        <td>${pct}%</td>
+        <td><div class="bar-wrap"><div class="bar" style="width:${bw}px"></div><span class="pct">${pct}%</span></div></td>
       </tr>`;
+      r.subs.forEach(s => {
+        const sp = (s.count / total * 100).toFixed(1);
+        const sbw = Math.round(s.count / maxCount * 150);
+        html += `<tr style="background:#f9faff;">
+          <td></td>
+          <td style="padding-left:28px;color:#666;font-size:13px;">└ ${esc(s.name)}</td>
+          <td style="color:#666;font-size:13px;">${s.count} / ${total}</td>
+          <td style="color:#666;font-size:13px;">${sp}%</td>
+          <td><div class="bar-wrap"><div class="bar" style="width:${sbw}px;background:#a0bffa;height:6px;"></div><span class="pct">${sp}%</span></div></td>
+        </tr>`;
+      });
     });
-  });
-  html += '</tbody></table>';
+    html += '</tbody></table>';
 
-  document.getElementById('result-wrap').innerHTML = html;
+    const tblWrap = document.createElement('div');
+    tblWrap.innerHTML = html;
+    block.appendChild(tblWrap);
+
+    // Divider between files
+    if (fi < files.length - 1) {
+      const divider = document.createElement('div');
+      divider.className = 'result-divider';
+      block.appendChild(divider);
+    }
+
+    wrap.appendChild(block);
+  });
+
+  if (!anyData) { showToast('所有文件均未找到数据行，请检查"表头共几行"设置'); return; }
+
+  document.getElementById('result-title').textContent =
+    files.length === 1 ? '统计结果' : `统计结果（共 ${files.length} 个文件）`;
+
   document.getElementById('step4-card').classList.remove('hidden');
   document.getElementById('step4-card').scrollIntoView({ behavior: 'smooth' });
 }
 
-function copyResult() {
-  const tbl = document.getElementById('rtbl');
+function copyResult(tblId) {
+  const tbl = document.getElementById(tblId);
   if (!tbl) return;
   let txt = '排名\t维度\t考查套数\t考频\n';
   for (const row of tbl.rows) {
-    if (row.rowIndex === 0) continue; // skip thead
+    if (row.rowIndex === 0) continue;
     const cells = Array.from(row.cells).slice(0, 4).map(c => c.textContent.trim().replace(/\s+/g,' '));
     txt += cells.join('\t') + '\n';
   }
   navigator.clipboard.writeText(txt).then(() => showToast('已复制，可直接粘贴到 Excel'));
 }
 
-function openInChartGenerator() {
+function openInChartGenerator(fileIdx) {
+  const fileEntry = files[fileIdx];
+  const { sheetData } = fileEntry;
   const hRows = getHeaderRows();
   const nameCol = getNameCol();
   const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
   const total = dataRows.length;
 
-  // 只取大类维度（排除子行），按考频排序
   const mainResults = dims
     .filter(d => d.cols.length > 0)
     .map(d => ({
