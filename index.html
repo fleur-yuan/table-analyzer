@@ -18,9 +18,9 @@
 
   .upload-zone { border: 2px dashed #d0d7de; border-radius: 10px; padding: 44px 20px; text-align: center; cursor: pointer; transition: all .2s; background: #fafbfc; }
   .upload-zone:hover, .upload-zone.drag-over { border-color: #4f8ef7; background: #eef4ff; }
-  .upload-zone .icon { font-size: 42px; margin-bottom: 10px; }
-  .upload-zone .hint { color: #666; font-size: 14px; }
-  .upload-zone .hint strong { color: #4f8ef7; }
+  .upload-zone .icon { font-size: 42px; margin-bottom: 10px; pointer-events: none; }
+  .upload-zone .hint { color: #666; font-size: 14px; pointer-events: none; }
+  .upload-zone .hint strong { color: #4f8ef7; pointer-events: none; }
   #file-input { display: none; }
 
   .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
@@ -165,12 +165,13 @@ let files = [];
 const uz = document.getElementById('upload-zone');
 const fi = document.getElementById('file-input');
 uz.onclick = () => fi.click();
-uz.ondragover = e => { e.preventDefault(); uz.classList.add('drag-over'); };
-uz.ondragleave = () => uz.classList.remove('drag-over');
+uz.ondragover = e => { e.preventDefault(); e.stopPropagation(); uz.classList.add('drag-over'); };
+uz.ondragleave = e => { if (!uz.contains(e.relatedTarget)) uz.classList.remove('drag-over'); };
 uz.ondrop = e => {
-  e.preventDefault(); uz.classList.remove('drag-over');
+  e.preventDefault(); e.stopPropagation(); uz.classList.remove('drag-over');
   const dropped = Array.from(e.dataTransfer.files).filter(f => /\.xlsx?$/i.test(f.name));
   if (dropped.length) loadFiles(dropped);
+  else showToast('请拖入 .xlsx 或 .xls 文件');
 };
 fi.onchange = e => { loadFiles(Array.from(e.target.files)); fi.value = ''; };
 
