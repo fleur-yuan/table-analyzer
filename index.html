@@ -244,8 +244,8 @@ function showStep2() {
 }
 
 function renderAllFileCfg() {
-  const container = document.getElementById('file-cfg-list');
-  container.innerHTML = '';
+  const cfgList = document.getElementById('file-cfg-list');
+  cfgList.innerHTML = '';
   files.forEach((f, i) => {
     // auto-init dims if empty
     if (!f.dims.length) autoGroupFile(i);
@@ -254,7 +254,7 @@ function renderAllFileCfg() {
 }
 
 function renderFileCfgBlock(i) {
-  const container = document.getElementById('file-cfg-list');
+  const cfgList = document.getElementById('file-cfg-list');
   // remove existing block for this file if any
   const existing = document.getElementById('fcfg-' + i);
   if (existing) existing.remove();
@@ -337,12 +337,11 @@ function renderFileCfgBlock(i) {
   block.appendChild(dimActs);
 
   // insert in order
-  const container = document.getElementById('file-cfg-list');
-  const blocks = container.querySelectorAll('.file-section');
+  const blocks = cfgList.querySelectorAll('.file-section');
   if (blocks.length === 0 || i >= blocks.length) {
-    container.appendChild(block);
+    cfgList.appendChild(block);
   } else {
-    container.insertBefore(block, blocks[i]);
+    cfgList.insertBefore(block, blocks[i]);
   }
 
   renderDimsForFile(i);
