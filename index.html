@@ -172,6 +172,7 @@
     <div class="result-actions">
       <button class="btn btn-secondary btn-sm" onclick="copyResult()">复制表格</button>
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('step3-card').scrollIntoView({behavior:'smooth'})">返回修改</button>
+      <button class="btn btn-primary btn-sm" onclick="openInChartGenerator()">在图表生成器中打开 →</button>
     </div>
     <div id="result-wrap"></div>
   </div>
@@ -538,6 +539,31 @@ function copyResult() {
     txt += cells.join('\t') + '\n';
   }
   navigator.clipboard.writeText(txt).then(() => showToast('已复制，可直接粘贴到 Excel'));
+}
+
+function openInChartGenerator() {
+  const hRows = getHeaderRows();
+  const nameCol = getNameCol();
+  const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
+  const total = dataRows.length;
+
+  // 只取大类维度（排除子行），按考频排序
+  const mainResults = dims
+    .filter(d => d.cols.length > 0)
+    .map(d => ({
+      name: d.name,
+      value: parseFloat((dataRows.filter(row => d.cols.some(c => getCellValue(row, c) !== null)).length / total * 100).toFixed(1))
+    }))
+    .sort((a, b) => b.value - a.value);
+
+  const payload = {
+    title: '各维度考频统计',
+    labels: mainResults.map(r => r.name),
+    values: mainResults.map(r => r.value)
+  };
+
+  const url = 'https://web-production-44f58.up.railway.app?data=' + encodeURIComponent(JSON.stringify(payload));
+  window.open(url, '_blank');
 }
 
 function showToast(msg) {
