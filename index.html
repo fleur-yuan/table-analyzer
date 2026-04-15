@@ -16,7 +16,6 @@
   .step-label { font-size: 11px; font-weight: 700; color: #aaa; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
 
-  /* Upload */
   .upload-zone { border: 2px dashed #d0d7de; border-radius: 10px; padding: 44px 20px; text-align: center; cursor: pointer; transition: all .2s; background: #fafbfc; }
   .upload-zone:hover, .upload-zone.drag-over { border-color: #4f8ef7; background: #eef4ff; }
   .upload-zone .icon { font-size: 42px; margin-bottom: 10px; }
@@ -24,7 +23,6 @@
   .upload-zone .hint strong { color: #4f8ef7; }
   #file-input { display: none; }
 
-  /* File list */
   .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
   .file-item { display: flex; align-items: center; gap: 8px; background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
   .file-item .fname { flex: 1; font-weight: 500; color: #2d6a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -32,19 +30,17 @@
   .file-item .btn-remove { background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1; }
   .file-item .btn-remove:hover { color: #f00; }
 
-  /* Per-file config in Step 2 */
-  .file-cfg-block { border: 1px solid #e8eaf0; border-radius: 10px; padding: 16px; margin-bottom: 14px; background: #fafbff; }
-  .file-cfg-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .file-cfg-title .file-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: #4f8ef7; color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  /* per-file section block */
+  .file-section { border: 1px solid #e8eaf0; border-radius: 10px; padding: 16px; margin-bottom: 16px; background: #fafbff; }
+  .file-section-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .file-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: #4f8ef7; color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0; }
 
-  /* Config row */
   .cfg-row { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
   .cfg-item { display: flex; flex-direction: column; gap: 4px; }
   .cfg-item label { font-size: 12px; color: #666; font-weight: 500; }
   .cfg-item input[type=number] { width: 80px; border: 1px solid #d0d7de; border-radius: 6px; padding: 6px 10px; font-size: 14px; outline: none; }
   .cfg-item input:focus { border-color: #4f8ef7; }
 
-  /* Buttons */
   .btn { padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .15s; }
   .btn-primary { background: #4f8ef7; color: #fff; }
   .btn-primary:hover { background: #3a7ef6; }
@@ -52,31 +48,37 @@
   .btn-secondary:hover { background: #e0e0e0; }
   .btn-sm { padding: 5px 12px; font-size: 13px; border-radius: 6px; }
 
-  /* Preview table */
   .preview-wrap { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #eee; }
   .preview-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .preview-wrap th { background: #f5f7fa; padding: 6px 10px; border-bottom: 1px solid #eee; white-space: nowrap; font-weight: 600; color: #555; }
   .preview-wrap td { padding: 5px 10px; border-bottom: 1px solid #f0f0f0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #555; font-size: 12px; }
   .preview-wrap tr:last-child td { border-bottom: none; }
-  .file-cfg-block .preview-summary { font-size: 12px; color: #52c41a; margin-top: 8px; }
+  .preview-summary { font-size: 12px; color: #52c41a; margin-top: 8px; }
 
-  /* Dimension editor */
-  .dim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; }
-  .dim-card { border: 1.5px solid #e0e6ff; border-radius: 10px; padding: 12px 14px; background: #f8f9ff; }
-  .dim-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .dim-name-input { flex: 1; border: 1px solid #d0d7de; border-radius: 6px; padding: 5px 10px; font-size: 13px; font-weight: 600; outline: none; }
+  /* dim editor inside file-section */
+  .dim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 12px; }
+  .dim-card { border: 1.5px solid #e0e6ff; border-radius: 10px; padding: 10px 12px; background: #f8f9ff; }
+  .dim-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dim-name-input { flex: 1; border: 1px solid #d0d7de; border-radius: 6px; padding: 4px 8px; font-size: 12px; font-weight: 600; outline: none; }
   .dim-name-input:focus { border-color: #4f8ef7; }
-  .btn-del-dim { background: none; border: none; color: #ccc; cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; }
+  .btn-del-dim { background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; }
   .btn-del-dim:hover { color: #f00; }
-  .col-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-  .col-chip { padding: 3px 9px; border-radius: 14px; font-size: 11px; border: 1.5px solid #c5d0fa; background: #fff; cursor: pointer; color: #4f8ef7; user-select: none; transition: all .12s; }
-  .col-chip:hover { background: #e8edff; }
+  .col-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .col-chip { padding: 2px 8px; border-radius: 12px; font-size: 11px; border: 1.5px solid #c5d0fa; background: #fff; cursor: pointer; color: #4f8ef7; user-select: none; transition: all .12s; }
   .col-chip.on { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
   .col-chip.off { border-color: #ddd; color: #aaa; background: #fff; }
   .col-chip.off:hover { border-color: #bbb; color: #888; }
-  .dim-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 
-  /* Result */
+  .dim-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+  .section-title { font-size: 12px; font-weight: 600; color: #666; margin-bottom: 6px; margin-top: 12px; }
+  .all-cols-pool { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px; background: #f8f8f8; border-radius: 8px; border: 1px solid #eee; min-height: 36px; }
+  .pool-chip { padding: 3px 9px; border-radius: 12px; font-size: 11px; border: 1.5px solid #d0d7de; background: #fff; cursor: pointer; color: #555; transition: all .12s; }
+  .pool-chip:hover { border-color: #4f8ef7; color: #4f8ef7; }
+  .pool-chip.used { opacity: .35; cursor: default; text-decoration: line-through; }
+  .info-box { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #7a5f00; margin-bottom: 10px; }
+
+  /* result */
   .result-block { margin-bottom: 28px; }
   .result-block-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
   .result-block-title { font-size: 15px; font-weight: 700; color: #333; }
@@ -87,7 +89,6 @@
   table.result-tbl td { padding: 9px 14px; border-bottom: 1px solid #f0f0f0; }
   table.result-tbl tr:last-child td { border-bottom: none; }
   table.result-tbl tr:hover td { background: #f8f9fb; }
-
   .bar-wrap { display: flex; align-items: center; gap: 8px; }
   .bar { height: 8px; border-radius: 4px; background: #4f8ef7; }
   .pct { font-size: 12px; color: #666; white-space: nowrap; }
@@ -98,33 +99,24 @@
   .r0 { background: #eee; color: #888; }
   .result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-  .info-box { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #7a5f00; margin-bottom: 14px; }
-  .success-box { background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #3a7d0a; margin-bottom: 14px; }
-
-  .hidden { display: none; }
-  .divider { height: 1px; background: #f0f0f0; margin: 16px 0; }
-
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 8px 22px; border-radius: 20px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 9999; }
-  .toast.show { opacity: 1; }
-
-  .section-title { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; }
-  .all-cols-pool { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: #f8f8f8; border-radius: 8px; border: 1px solid #eee; min-height: 40px; }
-  .pool-chip { padding: 4px 10px; border-radius: 14px; font-size: 12px; border: 1.5px solid #d0d7de; background: #fff; cursor: pointer; color: #555; transition: all .12s; }
-  .pool-chip:hover { border-color: #4f8ef7; color: #4f8ef7; }
-  .pool-chip.used { opacity: .35; cursor: default; text-decoration: line-through; }
-
   .result-block:nth-child(3n+1) table.result-tbl th { background: #f0f4ff; border-bottom-color: #d8e2ff; }
   .result-block:nth-child(3n+2) table.result-tbl th { background: #fff7e6; border-bottom-color: #ffd591; }
   .result-block:nth-child(3n+3) table.result-tbl th { background: #f6ffed; border-bottom-color: #b7eb8f; }
   .result-block:nth-child(3n+1) .bar { background: #4f8ef7; }
   .result-block:nth-child(3n+2) .bar { background: #fa8c16; }
   .result-block:nth-child(3n+3) .bar { background: #52c41a; }
+
+  .hidden { display: none; }
+  .divider { height: 1px; background: #f0f0f0; margin: 14px 0; }
+  .success-box { background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #3a7d0a; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 8px 22px; border-radius: 20px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 9999; }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>表格统计分析器</h1>
-  <p class="subtitle">支持多文件同时上传，每个文件独立配置表头，统计各维度考频与占比</p>
+  <p class="subtitle">支持多文件同时上传，每个文件独立配置表头和统计维度</p>
 
   <!-- Step 1 -->
   <div class="card">
@@ -137,34 +129,16 @@
     <input type="file" id="file-input" accept=".xlsx,.xls" multiple>
     <div class="file-list" id="file-list"></div>
     <div id="step1-next-wrap" class="hidden" style="margin-top:14px;">
-      <button class="btn btn-primary" onclick="showStep2()">下一步：确认各文件表格结构</button>
+      <button class="btn btn-primary" onclick="showStep2()">下一步：配置各文件结构与维度</button>
     </div>
   </div>
 
-  <!-- Step 2: per-file config -->
+  <!-- Step 2+3 combined: per-file config -->
   <div class="card hidden" id="step2-card">
-    <div class="step-label">Step 2</div>
-    <h2>确认各文件表格结构</h2>
-    <p style="font-size:13px;color:#888;margin-bottom:16px;">每个文件可以独立设置表头行数和名称列，设置后点击「刷新预览」确认。</p>
+    <div class="step-label">Step 2 &amp; 3</div>
+    <h2>配置各文件结构与统计维度</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:16px;">每个文件独立设置表头行数、名称列，以及统计维度。</p>
     <div id="file-cfg-list"></div>
-    <div class="divider"></div>
-    <button class="btn btn-primary" onclick="goStep3()">下一步：配置统计维度</button>
-  </div>
-
-  <!-- Step 3 -->
-  <div class="card hidden" id="step3-card">
-    <div class="step-label">Step 3</div>
-    <h2>配置统计维度</h2>
-    <div class="info-box" id="auto-detect-info"></div>
-    <div class="section-title">未分配的列（点击分配到某个维度）</div>
-    <div class="all-cols-pool" id="cols-pool"></div>
-    <div class="divider"></div>
-    <div class="section-title">统计维度（可修改名称、增删列）</div>
-    <div class="dim-grid" id="dim-grid"></div>
-    <div class="dim-actions">
-      <button class="btn btn-secondary btn-sm" onclick="addDim()">＋ 新增维度</button>
-      <button class="btn btn-secondary btn-sm" onclick="autoGroup()">⚡ 重新自动识别</button>
-    </div>
     <div class="divider"></div>
     <button class="btn btn-primary" onclick="analyze()">生成统计结果</button>
   </div>
@@ -173,8 +147,8 @@
   <div class="card hidden" id="step4-card">
     <div class="step-label">统计结果</div>
     <h2 id="result-title"></h2>
-    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
-      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('step3-card').scrollIntoView({behavior:'smooth'})">返回修改</button>
+    <div style="margin-bottom:18px;">
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('step2-card').scrollIntoView({behavior:'smooth'})">返回修改</button>
     </div>
     <div id="result-wrap"></div>
   </div>
@@ -184,9 +158,8 @@
 
 <script>
 // ─── State ───────────────────────────────────────────────
-// files[i] = { name, rawSheet, sheetData, merges, loaded, hRows, nameCol }
+// files[i] = { name, sheetData, merges, loaded, hRows, nameCol, dims[] }
 let files = [];
-let dims = [];   // shared dimension config (based on first file)
 
 // ─── Upload ──────────────────────────────────────────────
 const uz = document.getElementById('upload-zone');
@@ -199,20 +172,20 @@ uz.ondrop = e => {
   const dropped = Array.from(e.dataTransfer.files).filter(f => /\.xlsx?$/i.test(f.name));
   if (dropped.length) loadFiles(dropped);
 };
-fi.onchange = e => { const sel = Array.from(e.target.files); if (sel.length) loadFiles(sel); fi.value = ''; };
+fi.onchange = e => { loadFiles(Array.from(e.target.files)); fi.value = ''; };
 
 function loadFiles(newFiles) {
   newFiles.forEach(file => {
     if (files.some(f => f.name === file.name)) return;
-    const entry = { name: file.name, rawSheet: null, sheetData: [], merges: [], loaded: false, hRows: 2, nameCol: 0 };
+    const entry = { name: file.name, sheetData: [], merges: [], loaded: false, hRows: 2, nameCol: 0, dims: [] };
     files.push(entry);
     renderFileList();
     const reader = new FileReader();
     reader.onload = ev => {
       const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: false });
-      entry.rawSheet = wb.Sheets[wb.SheetNames[0]];
-      entry.sheetData = XLSX.utils.sheet_to_json(entry.rawSheet, { header: 1, defval: null, raw: true });
-      entry.merges = entry.rawSheet['!merges'] || [];
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      entry.sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null, raw: true });
+      entry.merges = sheet['!merges'] || [];
       entry.loaded = true;
       renderFileList();
       checkAllLoaded();
@@ -224,9 +197,9 @@ function loadFiles(newFiles) {
 function removeFile(idx) {
   files.splice(idx, 1);
   renderFileList();
-  if (files.length === 0) {
+  if (!files.length) {
     document.getElementById('step1-next-wrap').classList.add('hidden');
-    ['step2-card','step3-card','step4-card'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    ['step2-card','step4-card'].forEach(id => document.getElementById(id).classList.add('hidden'));
   }
 }
 
@@ -248,61 +221,137 @@ function checkAllLoaded() {
     document.getElementById('step1-next-wrap').classList.remove('hidden');
 }
 
-// ─── Step 2: Per-file config ─────────────────────────────
+// ─── Step 2+3: render per-file config ────────────────────
 function showStep2() {
   if (!files.length) { showToast('请先上传文件'); return; }
   document.getElementById('step2-card').classList.remove('hidden');
   document.getElementById('step2-card').scrollIntoView({ behavior: 'smooth' });
-  renderFileCfgList();
+  renderAllFileCfg();
 }
 
-function renderFileCfgList() {
+function renderAllFileCfg() {
   const container = document.getElementById('file-cfg-list');
   container.innerHTML = '';
   files.forEach((f, i) => {
-    const block = document.createElement('div');
-    block.className = 'file-cfg-block';
-    block.id = 'fcfg-' + i;
-    block.innerHTML = `
-      <div class="file-cfg-title">
-        <span class="file-num">${i + 1}</span>
-        <span>${esc(f.name)}</span>
-      </div>
-      <div class="cfg-row">
-        <div class="cfg-item">
-          <label>表头共几行？</label>
-          <input type="number" id="hrows-${i}" value="${f.hRows}" min="1" max="5"
-            onchange="files[${i}].hRows=parseInt(this.value)||1">
-        </div>
-        <div class="cfg-item">
-          <label>名称列（第几列）</label>
-          <input type="number" id="ncol-${i}" value="${f.nameCol + 1}" min="1"
-            onchange="files[${i}].nameCol=(parseInt(this.value)||1)-1">
-        </div>
-        <button class="btn btn-secondary btn-sm" onclick="refreshFilePrev(${i})">刷新预览</button>
-      </div>
-      <div id="fprev-${i}" class="preview-wrap" style="display:none;"></div>
-      <div id="fsum-${i}" class="preview-summary"></div>
-    `;
-    container.appendChild(block);
-    // auto-render preview
-    renderFilePrev(i);
+    // auto-init dims if empty
+    if (!f.dims.length) autoGroupFile(i);
+    renderFileCfgBlock(i);
   });
 }
 
-function refreshFilePrev(i) {
-  // sync inputs → state
-  files[i].hRows  = parseInt(document.getElementById('hrows-' + i).value) || 1;
-  files[i].nameCol = (parseInt(document.getElementById('ncol-' + i).value) || 1) - 1;
-  renderFilePrev(i);
+function renderFileCfgBlock(i) {
+  const container = document.getElementById('file-cfg-list');
+  // remove existing block for this file if any
+  const existing = document.getElementById('fcfg-' + i);
+  if (existing) existing.remove();
+
+  const f = files[i];
+  const block = document.createElement('div');
+  block.className = 'file-section';
+  block.id = 'fcfg-' + i;
+
+  // Title
+  const title = document.createElement('div');
+  title.className = 'file-section-title';
+  title.innerHTML = `<span class="file-num">${i + 1}</span><span>${esc(f.name)}</span>`;
+  block.appendChild(title);
+
+  // Config row
+  const cfgRow = document.createElement('div');
+  cfgRow.className = 'cfg-row';
+  cfgRow.innerHTML = `
+    <div class="cfg-item">
+      <label>表头共几行？</label>
+      <input type="number" id="hrows-${i}" value="${f.hRows}" min="1" max="5">
+    </div>
+    <div class="cfg-item">
+      <label>名称列（第几列）</label>
+      <input type="number" id="ncol-${i}" value="${f.nameCol + 1}" min="1">
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="applyFileCfg(${i})">刷新预览 &amp; 重新识别维度</button>
+  `;
+  block.appendChild(cfgRow);
+
+  // Preview
+  const prevWrap = document.createElement('div');
+  prevWrap.className = 'preview-wrap';
+  prevWrap.id = 'fprev-' + i;
+  prevWrap.innerHTML = buildPreviewHtml(f);
+  block.appendChild(prevWrap);
+
+  const sumEl = document.createElement('div');
+  sumEl.className = 'preview-summary';
+  sumEl.id = 'fsum-' + i;
+  const dr = f.sheetData.slice(f.hRows).filter(r => r && getCellValue(r, f.nameCol) !== null).length;
+  sumEl.textContent = `识别到 ${dr} 行数据`;
+  block.appendChild(sumEl);
+
+  // Divider
+  const dv = document.createElement('div'); dv.className = 'divider';
+  block.appendChild(dv);
+
+  // Dim section
+  const dimInfo = document.createElement('div');
+  dimInfo.className = 'info-box';
+  dimInfo.id = 'dim-info-' + i;
+  block.appendChild(dimInfo);
+
+  const poolTitle = document.createElement('div'); poolTitle.className = 'section-title';
+  poolTitle.textContent = '未分配的列';
+  block.appendChild(poolTitle);
+
+  const pool = document.createElement('div');
+  pool.className = 'all-cols-pool';
+  pool.id = 'pool-' + i;
+  block.appendChild(pool);
+
+  const dimTitle = document.createElement('div'); dimTitle.className = 'section-title';
+  dimTitle.style.marginTop = '10px';
+  dimTitle.textContent = '统计维度';
+  block.appendChild(dimTitle);
+
+  const dimGrid = document.createElement('div');
+  dimGrid.className = 'dim-grid';
+  dimGrid.id = 'dimgrid-' + i;
+  block.appendChild(dimGrid);
+
+  const dimActs = document.createElement('div'); dimActs.className = 'dim-actions';
+  dimActs.innerHTML = `
+    <button class="btn btn-secondary btn-sm" onclick="addDimToFile(${i})">＋ 新增维度</button>
+    <button class="btn btn-secondary btn-sm" onclick="autoGroupFile(${i});renderDimsForFile(${i})">⚡ 重新自动识别</button>
+  `;
+  block.appendChild(dimActs);
+
+  // insert in order
+  const container = document.getElementById('file-cfg-list');
+  const blocks = container.querySelectorAll('.file-section');
+  if (blocks.length === 0 || i >= blocks.length) {
+    container.appendChild(block);
+  } else {
+    container.insertBefore(block, blocks[i]);
+  }
+
+  renderDimsForFile(i);
+  updateDimInfo(i);
 }
 
-function renderFilePrev(i) {
-  const f = files[i];
+function applyFileCfg(i) {
+  files[i].hRows  = parseInt(document.getElementById('hrows-' + i).value) || 1;
+  files[i].nameCol = (parseInt(document.getElementById('ncol-' + i).value) || 1) - 1;
+  // refresh preview
+  document.getElementById('fprev-' + i).innerHTML = buildPreviewHtml(files[i]);
+  const dr = files[i].sheetData.slice(files[i].hRows).filter(r => r && getCellValue(r, files[i].nameCol) !== null).length;
+  document.getElementById('fsum-' + i).textContent = `识别到 ${dr} 行数据`;
+  // re-auto-group and re-render dims
+  autoGroupFile(i);
+  renderDimsForFile(i);
+  updateDimInfo(i);
+}
+
+function buildPreviewHtml(f) {
   const { sheetData, merges, hRows, nameCol } = f;
   const numCols = Math.max(...sheetData.slice(0, hRows).map(r => (r||[]).length), 0);
   const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
-
   let html = '<table><thead>';
   for (let hr = 0; hr < hRows; hr++) {
     html += '<tr>';
@@ -323,25 +372,12 @@ function renderFilePrev(i) {
     }
     html += '</tr>';
   });
-  html += '</tbody></table>';
-
-  const pw = document.getElementById('fprev-' + i);
-  pw.innerHTML = html;
-  pw.style.display = '';
-  document.getElementById('fsum-' + i).textContent = `识别到 ${dataRows.length} 行数据，${numCols} 列`;
+  return html + '</tbody></table>';
 }
 
-// ─── Step 3: Auto-group (based on first file) ────────────
-function goStep3() {
-  autoGroup();
-  document.getElementById('step3-card').classList.remove('hidden');
-  document.getElementById('step3-card').scrollIntoView({ behavior: 'smooth' });
-}
-
-function primaryFile() { return files[0] || { sheetData: [], merges: [], hRows: 2, nameCol: 0 }; }
-
-function autoGroup() {
-  const f = primaryFile();
+// ─── Per-file dim management ─────────────────────────────
+function autoGroupFile(i) {
+  const f = files[i];
   const { sheetData, merges, hRows, nameCol } = f;
   const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
   const subHeaders = getEffectiveHeadersFor(sheetData, merges, hRows);
@@ -354,50 +390,57 @@ function autoGroup() {
     else ungrouped.push(c);
   }
 
-  dims = [];
+  f.dims = [];
   if (Object.keys(groupMap).length > 0) {
-    for (const [label, cols] of Object.entries(groupMap)) dims.push({ name: label, cols: [...cols] });
-    ungrouped.forEach(c => dims.push({ name: subHeaders[c], cols: [c] }));
-    document.getElementById('auto-detect-info').innerHTML =
-      `⚡ 自动识别到 <strong>${dims.length} 个维度</strong>（根据第一个文件的合并表头分组）。可在下方调整。`;
+    for (const [label, cols] of Object.entries(groupMap)) f.dims.push({ name: label, cols: [...cols] });
+    ungrouped.forEach(c => f.dims.push({ name: subHeaders[c], cols: [c] }));
   } else {
     for (let c = 0; c < numCols; c++) {
       if (c === nameCol) continue;
-      dims.push({ name: subHeaders[c], cols: [c] });
+      f.dims.push({ name: subHeaders[c], cols: [c] });
     }
-    document.getElementById('auto-detect-info').innerHTML = `未检测到合并表头，已将每列作为独立维度。可手动调整。`;
   }
-  renderDims();
 }
 
-function renderDims() {
-  const f = primaryFile();
+function updateDimInfo(i) {
+  const f = files[i];
+  const el = document.getElementById('dim-info-' + i);
+  if (!el) return;
+  const hasGroups = f.dims.some(d => d.cols.length > 1);
+  el.innerHTML = hasGroups
+    ? `⚡ 自动识别到 <strong>${f.dims.length} 个维度</strong>（根据合并表头分组）。可在下方调整。`
+    : `识别到 <strong>${f.dims.length} 个维度</strong>，每列独立。可手动调整。`;
+}
+
+function renderDimsForFile(i) {
+  const f = files[i];
   const { sheetData, merges, hRows, nameCol } = f;
   const subHeaders = getEffectiveHeadersFor(sheetData, merges, hRows);
   const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
-  const assigned = new Set(dims.flatMap(d => d.cols));
+  const assigned = new Set(f.dims.flatMap(d => d.cols));
 
-  const pool = document.getElementById('cols-pool');
+  const pool = document.getElementById('pool-' + i);
+  if (!pool) return;
   pool.innerHTML = '';
   for (let c = 0; c < numCols; c++) {
     if (c === nameCol) continue;
     const chip = document.createElement('span');
     chip.className = 'pool-chip' + (assigned.has(c) ? ' used' : '');
     chip.textContent = subHeaders[c];
-    if (!assigned.has(c)) chip.onclick = () => assignToLastDim(c);
+    if (!assigned.has(c)) chip.onclick = () => assignToLastDimOfFile(i, c);
     pool.appendChild(chip);
   }
 
-  const grid = document.getElementById('dim-grid');
+  const grid = document.getElementById('dimgrid-' + i);
+  if (!grid) return;
   grid.innerHTML = '';
-  dims.forEach((d, di) => {
-    const card = document.createElement('div');
-    card.className = 'dim-card';
+  f.dims.forEach((d, di) => {
+    const card = document.createElement('div'); card.className = 'dim-card';
     const hdr = document.createElement('div'); hdr.className = 'dim-card-header';
     const inp = document.createElement('input'); inp.className = 'dim-name-input'; inp.value = d.name;
-    inp.oninput = e => { dims[di].name = e.target.value; };
+    inp.oninput = e => { files[i].dims[di].name = e.target.value; };
     const del = document.createElement('button'); del.className = 'btn-del-dim'; del.textContent = '×';
-    del.onclick = () => { dims.splice(di, 1); renderDims(); };
+    del.onclick = () => { files[i].dims.splice(di, 1); renderDimsForFile(i); };
     hdr.appendChild(inp); hdr.appendChild(del); card.appendChild(hdr);
 
     const chips = document.createElement('div'); chips.className = 'col-chips';
@@ -407,9 +450,13 @@ function renderDims() {
       chip.className = 'col-chip ' + (d.cols.includes(c) ? 'on' : 'off');
       chip.textContent = subHeaders[c];
       chip.onclick = () => {
-        if (d.cols.includes(c)) dims[di].cols = dims[di].cols.filter(x => x !== c);
-        else { dims.forEach((od, oi) => { if (oi !== di) dims[oi].cols = od.cols.filter(x => x !== c); }); dims[di].cols.push(c); }
-        renderDims();
+        if (files[i].dims[di].cols.includes(c)) {
+          files[i].dims[di].cols = files[i].dims[di].cols.filter(x => x !== c);
+        } else {
+          files[i].dims.forEach((od, oi) => { if (oi !== di) files[i].dims[oi].cols = od.cols.filter(x => x !== c); });
+          files[i].dims[di].cols.push(c);
+        }
+        renderDimsForFile(i);
       };
       chips.appendChild(chip);
     }
@@ -417,22 +464,31 @@ function renderDims() {
   });
 }
 
-function assignToLastDim(c) {
-  if (!dims.length) addDim();
-  const last = dims[dims.length - 1];
-  if (!last.cols.includes(c)) { dims.forEach(d => { d.cols = d.cols.filter(x => x !== c); }); last.cols.push(c); renderDims(); }
+function assignToLastDimOfFile(i, c) {
+  const f = files[i];
+  if (!f.dims.length) addDimToFile(i);
+  const last = f.dims[f.dims.length - 1];
+  if (!last.cols.includes(c)) {
+    f.dims.forEach(d => { d.cols = d.cols.filter(x => x !== c); });
+    last.cols.push(c);
+    renderDimsForFile(i);
+  }
 }
-function addDim() { dims.push({ name: '新维度', cols: [] }); renderDims(); }
 
-// ─── Step 4: Analyze – each file uses its own hRows/nameCol ──
+function addDimToFile(i) {
+  files[i].dims.push({ name: '新维度', cols: [] });
+  renderDimsForFile(i);
+}
+
+// ─── Step 4: Analyze ─────────────────────────────────────
 function analyze() {
-  if (!dims.length) { showToast('请至少添加一个统计维度'); return; }
   const wrap = document.getElementById('result-wrap');
   wrap.innerHTML = '';
   let anyData = false;
 
-  files.forEach((fileEntry, fi) => {
-    const { sheetData, merges, hRows, nameCol } = fileEntry;
+  files.forEach((f, fi) => {
+    const { sheetData, hRows, nameCol, dims, merges } = f;
+    if (!dims.length) { showToast(`"${f.name}" 没有配置统计维度`); return; }
     const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
     const total = dataRows.length;
     if (!total) return;
@@ -444,7 +500,7 @@ function analyze() {
       .map(d => {
         const count = dataRows.filter(row => d.cols.some(c => getCellValue(row, c) !== null)).length;
         const subs = d.cols.length > 1
-          ? d.cols.map(c => ({ name: subHdrs[c] || ('列'+(c+1)), count: dataRows.filter(row => getCellValue(row,c) !== null).length }))
+          ? d.cols.map(c => ({ name: subHdrs[c]||('列'+(c+1)), count: dataRows.filter(row => getCellValue(row,c)!==null).length }))
           : [];
         return { name: d.name, count, subs };
       })
@@ -452,31 +508,30 @@ function analyze() {
 
     const maxCount = results[0]?.count || 1;
     const tblId = 'rtbl-' + fi;
-    const block = document.createElement('div');
-    block.className = 'result-block';
+    const block = document.createElement('div'); block.className = 'result-block';
 
-    const blockHdr = document.createElement('div'); blockHdr.className = 'result-block-header';
-    const titleWrap = document.createElement('div');
-    titleWrap.innerHTML = `<div class="result-block-title">${esc(fileEntry.name)}</div><div class="result-block-subtitle">共 ${total} 份试卷</div>`;
-    const actWrap = document.createElement('div'); actWrap.className = 'result-actions';
-    actWrap.innerHTML = `<button class="btn btn-secondary btn-sm" onclick="copyResult('${tblId}')">复制表格</button>
+    const bHdr = document.createElement('div'); bHdr.className = 'result-block-header';
+    const tWrap = document.createElement('div');
+    tWrap.innerHTML = `<div class="result-block-title">${esc(f.name)}</div><div class="result-block-subtitle">共 ${total} 份试卷</div>`;
+    const aWrap = document.createElement('div'); aWrap.className = 'result-actions';
+    aWrap.innerHTML = `<button class="btn btn-secondary btn-sm" onclick="copyResult('${tblId}')">复制表格</button>
       <button class="btn btn-primary btn-sm" onclick="openInChartGenerator(${fi})">在图表生成器中打开 →</button>`;
-    blockHdr.appendChild(titleWrap); blockHdr.appendChild(actWrap);
-    block.appendChild(blockHdr);
+    bHdr.appendChild(tWrap); bHdr.appendChild(aWrap);
+    block.appendChild(bHdr);
 
     let html = `<table class="result-tbl" id="${tblId}"><thead><tr>
       <th>排名</th><th>维度</th><th>考查套数</th><th>考频</th><th>可视化</th></tr></thead><tbody>`;
     results.forEach((r, i) => {
-      const pct = (r.count/total*100).toFixed(1), bw = Math.round(r.count/maxCount*150);
-      const rc = i===0?'r1':i===1?'r2':i===2?'r3':'r0';
-      html += `<tr style="background:#fff;"><td><span class="rank-badge ${rc}">${i+1}</span></td>
+      const pct=(r.count/total*100).toFixed(1), bw=Math.round(r.count/maxCount*150);
+      const rc=i===0?'r1':i===1?'r2':i===2?'r3':'r0';
+      html+=`<tr style="background:#fff;"><td><span class="rank-badge ${rc}">${i+1}</span></td>
         <td><strong>${esc(r.name)}</strong></td><td>${r.count} / ${total}</td><td>${pct}%</td>
         <td><div class="bar-wrap"><div class="bar" style="width:${bw}px"></div><span class="pct">${pct}%</span></div></td></tr>`;
       r.subs.forEach(s => {
         const sp=(s.count/total*100).toFixed(1), sbw=Math.round(s.count/maxCount*150);
         html+=`<tr style="background:#f9faff;"><td></td>
-          <td style="padding-left:28px;color:#666;font-size:13px;">└ ${esc(s.name)}</td>
-          <td style="color:#666;font-size:13px;">${s.count} / ${total}</td>
+          <td style="padding-left:26px;color:#666;font-size:13px;">└ ${esc(s.name)}</td>
+          <td style="color:#666;font-size:13px;">${s.count}/${total}</td>
           <td style="color:#666;font-size:13px;">${sp}%</td>
           <td><div class="bar-wrap"><div class="bar" style="width:${sbw}px;background:#a0bffa;height:6px;"></div><span class="pct">${sp}%</span></div></td></tr>`;
       });
@@ -484,12 +539,12 @@ function analyze() {
     html += '</tbody></table>';
     const tw = document.createElement('div'); tw.innerHTML = html;
     block.appendChild(tw);
-    if (fi < files.length - 1) { const dv = document.createElement('div'); dv.className = 'result-divider'; block.appendChild(dv); }
+    if (fi < files.length - 1) { const dv2=document.createElement('div'); dv2.className='result-divider'; block.appendChild(dv2); }
     wrap.appendChild(block);
   });
 
   if (!anyData) { showToast('所有文件均未找到数据行，请检查表头行数设置'); return; }
-  document.getElementById('result-title').textContent = files.length === 1 ? '统计结果' : `统计结果（共 ${files.length} 个文件）`;
+  document.getElementById('result-title').textContent = files.length===1 ? '统计结果' : `统计结果（共 ${files.length} 个文件）`;
   document.getElementById('step4-card').classList.remove('hidden');
   document.getElementById('step4-card').scrollIntoView({ behavior: 'smooth' });
 }
@@ -498,17 +553,17 @@ function copyResult(tblId) {
   const tbl = document.getElementById(tblId); if (!tbl) return;
   let txt = '排名\t维度\t考查套数\t考频\n';
   for (const row of tbl.rows) {
-    if (row.rowIndex === 0) continue;
-    txt += Array.from(row.cells).slice(0,4).map(c=>c.textContent.trim().replace(/\s+/g,' ')).join('\t') + '\n';
+    if (row.rowIndex===0) continue;
+    txt += Array.from(row.cells).slice(0,4).map(c=>c.textContent.trim().replace(/\s+/g,' ')).join('\t')+'\n';
   }
-  navigator.clipboard.writeText(txt).then(() => showToast('已复制，可直接粘贴到 Excel'));
+  navigator.clipboard.writeText(txt).then(()=>showToast('已复制，可直接粘贴到 Excel'));
 }
 
 function openInChartGenerator(fileIdx) {
   const f = files[fileIdx];
   const dataRows = f.sheetData.slice(f.hRows).filter(r => r && getCellValue(r, f.nameCol) !== null);
   const total = dataRows.length;
-  const mainResults = dims.filter(d=>d.cols.length>0)
+  const mainResults = f.dims.filter(d=>d.cols.length>0)
     .map(d=>({ name:d.name, value:parseFloat((dataRows.filter(row=>d.cols.some(c=>getCellValue(row,c)!==null)).length/total*100).toFixed(1)) }))
     .sort((a,b)=>b.value-a.value);
   const payload = { title:'各维度考频统计', labels:mainResults.map(r=>r.name), values:mainResults.map(r=>r.value) };
@@ -518,26 +573,26 @@ function openInChartGenerator(fileIdx) {
 // ─── Helpers ─────────────────────────────────────────────
 function getMergeSpanFor(mergesArr, r, c) {
   for (const m of mergesArr) {
-    if (m.s.r===r && m.s.c===c) return { colspan:m.e.c-m.s.c+1, rowspan:m.e.r-m.s.r+1 };
-    if (r>=m.s.r && r<=m.e.r && c>=m.s.c && c<=m.e.c) return null;
+    if (m.s.r===r&&m.s.c===c) return {colspan:m.e.c-m.s.c+1,rowspan:m.e.r-m.s.r+1};
+    if (r>=m.s.r&&r<=m.e.r&&c>=m.s.c&&c<=m.e.c) return null;
   }
-  return { colspan:1, rowspan:1 };
+  return {colspan:1,rowspan:1};
 }
 
 function getEffectiveHeadersFor(sheetData, mergesArr, hRows) {
-  const numCols = Math.max(...sheetData.slice(0, hRows+1).map(r=>(r||[]).length), 0);
+  const numCols = Math.max(...sheetData.slice(0,hRows+1).map(r=>(r||[]).length),0);
   const labels = [];
-  for (let c = 0; c < numCols; c++) {
-    let label = null;
-    for (let r = hRows-1; r >= 0; r--) {
-      const v = (sheetData[r]||[])[c];
-      if (v!=null && String(v).trim()!=='') { label=String(v).trim(); break; }
+  for (let c=0;c<numCols;c++) {
+    let label=null;
+    for (let r=hRows-1;r>=0;r--) {
+      const v=(sheetData[r]||[])[c];
+      if (v!=null&&String(v).trim()!==''){label=String(v).trim();break;}
     }
     if (label===null) {
       outer: for (const m of mergesArr) {
-        if (m.e.r<hRows && c>=m.s.c && c<=m.e.c) {
+        if (m.e.r<hRows&&c>=m.s.c&&c<=m.e.c){
           const v=(sheetData[m.s.r]||[])[m.s.c];
-          if (v!=null) { label=String(v).trim(); break outer; }
+          if (v!=null){label=String(v).trim();break outer;}
         }
       }
     }
@@ -547,10 +602,10 @@ function getEffectiveHeadersFor(sheetData, mergesArr, hRows) {
 }
 
 function getTopLevelLabelFor(sheetData, mergesArr, colIdx) {
-  const v0 = (sheetData[0]||[])[colIdx];
-  if (v0!=null && String(v0).trim()!=='') return String(v0).trim();
+  const v0=(sheetData[0]||[])[colIdx];
+  if (v0!=null&&String(v0).trim()!=='') return String(v0).trim();
   for (const m of mergesArr) {
-    if (m.s.r===0 && colIdx>=m.s.c && colIdx<=m.e.c) {
+    if (m.s.r===0&&colIdx>=m.s.c&&colIdx<=m.e.c){
       const mv=(sheetData[0]||[])[m.s.c];
       if (mv!=null) return String(mv).trim();
     }
@@ -558,19 +613,14 @@ function getTopLevelLabelFor(sheetData, mergesArr, colIdx) {
   return null;
 }
 
-function getCellValue(row, c) {
+function getCellValue(row,c) {
   if (!row) return null;
-  const v = row[c];
+  const v=row[c];
   if (v===null||v===undefined||String(v).trim()==='') return null;
   return v;
 }
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 </script>
 </body>
 </html>
