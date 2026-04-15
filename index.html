@@ -32,8 +32,13 @@
   .file-item .btn-remove { background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; padding: 0 2px; line-height: 1; }
   .file-item .btn-remove:hover { color: #f00; }
 
+  /* Per-file config in Step 2 */
+  .file-cfg-block { border: 1px solid #e8eaf0; border-radius: 10px; padding: 16px; margin-bottom: 14px; background: #fafbff; }
+  .file-cfg-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .file-cfg-title .file-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: #4f8ef7; color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
   /* Config row */
-  .cfg-row { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .cfg-row { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
   .cfg-item { display: flex; flex-direction: column; gap: 4px; }
   .cfg-item label { font-size: 12px; color: #666; font-weight: 500; }
   .cfg-item input[type=number] { width: 80px; border: 1px solid #d0d7de; border-radius: 6px; padding: 6px 10px; font-size: 14px; outline: none; }
@@ -48,11 +53,12 @@
   .btn-sm { padding: 5px 12px; font-size: 13px; border-radius: 6px; }
 
   /* Preview table */
-  .preview-wrap { overflow-x: auto; margin-top: 14px; border-radius: 8px; border: 1px solid #eee; }
+  .preview-wrap { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #eee; }
   .preview-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .preview-wrap th { background: #f5f7fa; padding: 6px 10px; border-bottom: 1px solid #eee; white-space: nowrap; font-weight: 600; color: #555; }
   .preview-wrap td { padding: 5px 10px; border-bottom: 1px solid #f0f0f0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #555; font-size: 12px; }
   .preview-wrap tr:last-child td { border-bottom: none; }
+  .file-cfg-block .preview-summary { font-size: 12px; color: #52c41a; margin-top: 8px; }
 
   /* Dimension editor */
   .dim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; }
@@ -68,7 +74,6 @@
   .col-chip.on { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
   .col-chip.off { border-color: #ddd; color: #aaa; background: #fff; }
   .col-chip.off:hover { border-color: #bbb; color: #888; }
-
   .dim-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 
   /* Result */
@@ -91,7 +96,6 @@
   .r2 { background: #c8c8c8; color: #444; }
   .r3 { background: #cd7f32; color: #fff; }
   .r0 { background: #eee; color: #888; }
-
   .result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .info-box { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #7a5f00; margin-bottom: 14px; }
@@ -109,8 +113,6 @@
   .pool-chip:hover { border-color: #4f8ef7; color: #4f8ef7; }
   .pool-chip.used { opacity: .35; cursor: default; text-decoration: line-through; }
 
-  /* file color chips */
-  .file-color { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; }
   .result-block:nth-child(3n+1) table.result-tbl th { background: #f0f4ff; border-bottom-color: #d8e2ff; }
   .result-block:nth-child(3n+2) table.result-tbl th { background: #fff7e6; border-bottom-color: #ffd591; }
   .result-block:nth-child(3n+3) table.result-tbl th { background: #f6ffed; border-bottom-color: #b7eb8f; }
@@ -122,7 +124,7 @@
 <body>
 <div class="container">
   <h1>表格统计分析器</h1>
-  <p class="subtitle">支持多文件同时上传，自动识别合并表头，统计各维度考频与占比</p>
+  <p class="subtitle">支持多文件同时上传，每个文件独立配置表头，统计各维度考频与占比</p>
 
   <!-- Step 1 -->
   <div class="card">
@@ -135,56 +137,34 @@
     <input type="file" id="file-input" accept=".xlsx,.xls" multiple>
     <div class="file-list" id="file-list"></div>
     <div id="step1-next-wrap" class="hidden" style="margin-top:14px;">
-      <button class="btn btn-primary" onclick="showStep2()">下一步：确认表格结构</button>
+      <button class="btn btn-primary" onclick="showStep2()">下一步：确认各文件表格结构</button>
     </div>
   </div>
 
-  <!-- Step 2 -->
+  <!-- Step 2: per-file config -->
   <div class="card hidden" id="step2-card">
     <div class="step-label">Step 2</div>
-    <h2>确认表格结构</h2>
-    <p style="font-size:13px;color:#888;margin-bottom:14px;">以下设置将应用到所有已上传的文件（假设结构相同）。</p>
-
-    <div class="cfg-row">
-      <div class="cfg-item">
-        <label>表头共几行？</label>
-        <input type="number" id="header-rows" value="2" min="1" max="5">
-      </div>
-      <div class="cfg-item">
-        <label>名称列（第几列）</label>
-        <input type="number" id="name-col" value="1" min="1">
-      </div>
-      <button class="btn btn-secondary btn-sm" onclick="refreshPreview()">刷新预览</button>
-    </div>
-
-    <div class="section-title">数据预览（第一个文件，前5行）</div>
-    <div id="preview-wrap" class="preview-wrap"></div>
-
+    <h2>确认各文件表格结构</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:16px;">每个文件可以独立设置表头行数和名称列，设置后点击「刷新预览」确认。</p>
+    <div id="file-cfg-list"></div>
     <div class="divider"></div>
-    <div id="parse-summary" class="success-box hidden"></div>
-
-    <button class="btn btn-primary" onclick="goStep3()" style="margin-top:4px;">下一步：配置统计维度</button>
+    <button class="btn btn-primary" onclick="goStep3()">下一步：配置统计维度</button>
   </div>
 
   <!-- Step 3 -->
   <div class="card hidden" id="step3-card">
     <div class="step-label">Step 3</div>
     <h2>配置统计维度</h2>
-
     <div class="info-box" id="auto-detect-info"></div>
-
     <div class="section-title">未分配的列（点击分配到某个维度）</div>
     <div class="all-cols-pool" id="cols-pool"></div>
-
     <div class="divider"></div>
     <div class="section-title">统计维度（可修改名称、增删列）</div>
     <div class="dim-grid" id="dim-grid"></div>
-
     <div class="dim-actions">
       <button class="btn btn-secondary btn-sm" onclick="addDim()">＋ 新增维度</button>
       <button class="btn btn-secondary btn-sm" onclick="autoGroup()">⚡ 重新自动识别</button>
     </div>
-
     <div class="divider"></div>
     <button class="btn btn-primary" onclick="analyze()">生成统计结果</button>
   </div>
@@ -204,10 +184,9 @@
 
 <script>
 // ─── State ───────────────────────────────────────────────
-// Multi-file state: array of { name, rawSheet, sheetData, merges }
+// files[i] = { name, rawSheet, sheetData, merges, loaded, hRows, nameCol }
 let files = [];
-// Shared config (applied to all files)
-let dims = [];
+let dims = [];   // shared dimension config (based on first file)
 
 // ─── Upload ──────────────────────────────────────────────
 const uz = document.getElementById('upload-zone');
@@ -216,26 +195,20 @@ uz.onclick = () => fi.click();
 uz.ondragover = e => { e.preventDefault(); uz.classList.add('drag-over'); };
 uz.ondragleave = () => uz.classList.remove('drag-over');
 uz.ondrop = e => {
-  e.preventDefault();
-  uz.classList.remove('drag-over');
+  e.preventDefault(); uz.classList.remove('drag-over');
   const dropped = Array.from(e.dataTransfer.files).filter(f => /\.xlsx?$/i.test(f.name));
   if (dropped.length) loadFiles(dropped);
 };
-fi.onchange = e => {
-  const selected = Array.from(e.target.files);
-  if (selected.length) loadFiles(selected);
-  fi.value = '';
-};
+fi.onchange = e => { const sel = Array.from(e.target.files); if (sel.length) loadFiles(sel); fi.value = ''; };
 
 function loadFiles(newFiles) {
   newFiles.forEach(file => {
-    // skip duplicates by name
     if (files.some(f => f.name === file.name)) return;
-    const entry = { name: file.name, rawSheet: null, sheetData: [], merges: [], loaded: false };
+    const entry = { name: file.name, rawSheet: null, sheetData: [], merges: [], loaded: false, hRows: 2, nameCol: 0 };
     files.push(entry);
     renderFileList();
     const reader = new FileReader();
-    reader.onload = function(ev) {
+    reader.onload = ev => {
       const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: false });
       entry.rawSheet = wb.Sheets[wb.SheetNames[0]];
       entry.sheetData = XLSX.utils.sheet_to_json(entry.rawSheet, { header: 1, defval: null, raw: true });
@@ -253,9 +226,7 @@ function removeFile(idx) {
   renderFileList();
   if (files.length === 0) {
     document.getElementById('step1-next-wrap').classList.add('hidden');
-    document.getElementById('step2-card').classList.add('hidden');
-    document.getElementById('step3-card').classList.add('hidden');
-    document.getElementById('step4-card').classList.add('hidden');
+    ['step2-card','step3-card','step4-card'].forEach(id => document.getElementById(id).classList.add('hidden'));
   }
 }
 
@@ -265,51 +236,81 @@ function renderFileList() {
   files.forEach((f, i) => {
     const item = document.createElement('div');
     item.className = 'file-item';
-    item.innerHTML = `
-      <span class="fname">${esc(f.name)}</span>
+    item.innerHTML = `<span class="fname">${esc(f.name)}</span>
       <span class="fstatus">${f.loaded ? '✓ 已加载' : '加载中…'}</span>
-      <button class="btn-remove" onclick="removeFile(${i})" title="移除">×</button>
-    `;
+      <button class="btn-remove" onclick="removeFile(${i})" title="移除">×</button>`;
     list.appendChild(item);
   });
 }
 
 function checkAllLoaded() {
-  if (files.length > 0 && files.every(f => f.loaded)) {
+  if (files.length > 0 && files.every(f => f.loaded))
     document.getElementById('step1-next-wrap').classList.remove('hidden');
-  }
 }
 
+// ─── Step 2: Per-file config ─────────────────────────────
 function showStep2() {
-  if (files.length === 0) { showToast('请先上传文件'); return; }
+  if (!files.length) { showToast('请先上传文件'); return; }
   document.getElementById('step2-card').classList.remove('hidden');
   document.getElementById('step2-card').scrollIntoView({ behavior: 'smooth' });
-  refreshPreview();
+  renderFileCfgList();
 }
 
-// ─── Step 2: Preview (uses first file) ───────────────────
-function getHeaderRows() { return parseInt(document.getElementById('header-rows').value) || 2; }
-function getNameCol()    { return parseInt(document.getElementById('name-col').value) - 1; }
+function renderFileCfgList() {
+  const container = document.getElementById('file-cfg-list');
+  container.innerHTML = '';
+  files.forEach((f, i) => {
+    const block = document.createElement('div');
+    block.className = 'file-cfg-block';
+    block.id = 'fcfg-' + i;
+    block.innerHTML = `
+      <div class="file-cfg-title">
+        <span class="file-num">${i + 1}</span>
+        <span>${esc(f.name)}</span>
+      </div>
+      <div class="cfg-row">
+        <div class="cfg-item">
+          <label>表头共几行？</label>
+          <input type="number" id="hrows-${i}" value="${f.hRows}" min="1" max="5"
+            onchange="files[${i}].hRows=parseInt(this.value)||1">
+        </div>
+        <div class="cfg-item">
+          <label>名称列（第几列）</label>
+          <input type="number" id="ncol-${i}" value="${f.nameCol + 1}" min="1"
+            onchange="files[${i}].nameCol=(parseInt(this.value)||1)-1">
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="refreshFilePrev(${i})">刷新预览</button>
+      </div>
+      <div id="fprev-${i}" class="preview-wrap" style="display:none;"></div>
+      <div id="fsum-${i}" class="preview-summary"></div>
+    `;
+    container.appendChild(block);
+    // auto-render preview
+    renderFilePrev(i);
+  });
+}
 
-// Return sheetData/merges for the primary file (first)
-function primaryData() { return files[0] || { sheetData: [], merges: [] }; }
+function refreshFilePrev(i) {
+  // sync inputs → state
+  files[i].hRows  = parseInt(document.getElementById('hrows-' + i).value) || 1;
+  files[i].nameCol = (parseInt(document.getElementById('ncol-' + i).value) || 1) - 1;
+  renderFilePrev(i);
+}
 
-function refreshPreview() {
-  const { sheetData, merges: fileMerges } = primaryData();
-  const hRows = getHeaderRows();
-  const nameCol = getNameCol();
-  const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
-  const total = dataRows.length;
+function renderFilePrev(i) {
+  const f = files[i];
+  const { sheetData, merges, hRows, nameCol } = f;
   const numCols = Math.max(...sheetData.slice(0, hRows).map(r => (r||[]).length), 0);
+  const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
 
   let html = '<table><thead>';
   for (let hr = 0; hr < hRows; hr++) {
     html += '<tr>';
     for (let c = 0; c < numCols; c++) {
       const v = (sheetData[hr]||[])[c];
-      const mspan = getMergeSpanFor(fileMerges, hr, c);
-      if (mspan === null) continue;
-      html += `<th colspan="${mspan.colspan}" rowspan="${mspan.rowspan}">${v !== null && v !== undefined ? esc(String(v)) : ''}</th>`;
+      const ms = getMergeSpanFor(merges, hr, c);
+      if (ms === null) continue;
+      html += `<th colspan="${ms.colspan}" rowspan="${ms.rowspan}">${v != null ? esc(String(v)) : ''}</th>`;
     }
     html += '</tr>';
   }
@@ -318,141 +319,62 @@ function refreshPreview() {
     html += '<tr>';
     for (let c = 0; c < numCols; c++) {
       const v = getCellValue(row, c);
-      html += `<td title="${v !== null ? esc(String(v)) : ''}">${v !== null && v !== undefined ? esc(String(v).substring(0,30)) : ''}</td>`;
+      html += `<td>${v != null ? esc(String(v).substring(0,30)) : ''}</td>`;
     }
     html += '</tr>';
   });
   html += '</tbody></table>';
-  document.getElementById('preview-wrap').innerHTML = html;
 
-  const sumEl = document.getElementById('parse-summary');
-  const allInfo = files.map(f => {
-    const dr = f.sheetData.slice(hRows).filter(r => r && getCellValue(r, getNameCol()) !== null).length;
-    return `${esc(f.name)}（${dr} 行）`;
-  }).join('　');
-  sumEl.innerHTML = `识别到 <strong>${files.length} 个文件</strong>：${allInfo}`;
-  sumEl.classList.remove('hidden');
+  const pw = document.getElementById('fprev-' + i);
+  pw.innerHTML = html;
+  pw.style.display = '';
+  document.getElementById('fsum-' + i).textContent = `识别到 ${dataRows.length} 行数据，${numCols} 列`;
 }
 
-// ─── Merge helpers (takes explicit merges array) ─────────
-function getMergeSpanFor(mergesArr, r, c) {
-  for (const m of mergesArr) {
-    if (m.s.r === r && m.s.c === c) return { colspan: m.e.c - m.s.c + 1, rowspan: m.e.r - m.s.r + 1 };
-    if (r >= m.s.r && r <= m.e.r && c >= m.s.c && c <= m.e.c) return null;
-  }
-  return { colspan: 1, rowspan: 1 };
-}
-
-// Legacy wrappers for primary file
-function getMergeSpan(r, c) { return getMergeSpanFor(primaryData().merges, r, c); }
-
-function getEffectiveHeadersFor(sheetData, mergesArr) {
-  const hRows = getHeaderRows();
-  const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
-  const labels = [];
-  for (let c = 0; c < numCols; c++) {
-    let label = null;
-    for (let r = hRows - 1; r >= 0; r--) {
-      const v = (sheetData[r]||[])[c];
-      if (v !== null && v !== undefined && String(v).trim() !== '') {
-        label = String(v).trim();
-        break;
-      }
-    }
-    if (label === null) {
-      outer: for (const m of mergesArr) {
-        if (m.e.r < hRows && c >= m.s.c && c <= m.e.c) {
-          const v = (sheetData[m.s.r]||[])[m.s.c];
-          if (v !== null && v !== undefined) { label = String(v).trim(); break outer; }
-        }
-      }
-    }
-    labels.push(label || ('列' + (c + 1)));
-  }
-  return labels;
-}
-
-function getEffectiveHeaders() {
-  const { sheetData, merges: fileMerges } = primaryData();
-  return getEffectiveHeadersFor(sheetData, fileMerges);
-}
-
-function getTopLevelLabelFor(sheetData, mergesArr, colIdx) {
-  const v0 = (sheetData[0]||[])[colIdx];
-  if (v0 !== null && v0 !== undefined && String(v0).trim() !== '') return String(v0).trim();
-  for (const m of mergesArr) {
-    if (m.s.r === 0 && colIdx >= m.s.c && colIdx <= m.e.c) {
-      const mv = (sheetData[0]||[])[m.s.c];
-      if (mv !== null && mv !== undefined) return String(mv).trim();
-    }
-  }
-  return null;
-}
-
-function getCellValue(row, c) {
-  if (!row) return null;
-  const v = row[c];
-  if (v === null || v === undefined) return null;
-  if (String(v).trim() === '') return null;
-  return v;
-}
-
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ─── Step 3: Auto-group (uses primary file) ──────────────
+// ─── Step 3: Auto-group (based on first file) ────────────
 function goStep3() {
   autoGroup();
   document.getElementById('step3-card').classList.remove('hidden');
   document.getElementById('step3-card').scrollIntoView({ behavior: 'smooth' });
 }
 
-function autoGroup() {
-  const { sheetData, merges: fileMerges } = primaryData();
-  const hRows = getHeaderRows();
-  const nameCol = getNameCol();
-  const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
-  const subHeaders = getEffectiveHeadersFor(sheetData, fileMerges);
+function primaryFile() { return files[0] || { sheetData: [], merges: [], hRows: 2, nameCol: 0 }; }
 
-  const groupMap = {};
-  const ungrouped = [];
+function autoGroup() {
+  const f = primaryFile();
+  const { sheetData, merges, hRows, nameCol } = f;
+  const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
+  const subHeaders = getEffectiveHeadersFor(sheetData, merges, hRows);
+  const groupMap = {}, ungrouped = [];
 
   for (let c = 0; c < numCols; c++) {
     if (c === nameCol) continue;
-    const topLabel = getTopLevelLabelFor(sheetData, fileMerges, c);
-    if (topLabel) {
-      if (!groupMap[topLabel]) groupMap[topLabel] = [];
-      groupMap[topLabel].push(c);
-    } else {
-      ungrouped.push(c);
-    }
+    const top = getTopLevelLabelFor(sheetData, merges, c);
+    if (top) { (groupMap[top] = groupMap[top] || []).push(c); }
+    else ungrouped.push(c);
   }
 
   dims = [];
   if (Object.keys(groupMap).length > 0) {
-    for (const [label, cols] of Object.entries(groupMap)) {
-      dims.push({ name: label, cols: [...cols] });
-    }
+    for (const [label, cols] of Object.entries(groupMap)) dims.push({ name: label, cols: [...cols] });
     ungrouped.forEach(c => dims.push({ name: subHeaders[c], cols: [c] }));
     document.getElementById('auto-detect-info').innerHTML =
-      `⚡ 自动识别到 <strong>${dims.length} 个维度</strong>（根据合并表头分组）。可在下方调整名称或列的归属。`;
+      `⚡ 自动识别到 <strong>${dims.length} 个维度</strong>（根据第一个文件的合并表头分组）。可在下方调整。`;
   } else {
     for (let c = 0; c < numCols; c++) {
       if (c === nameCol) continue;
       dims.push({ name: subHeaders[c], cols: [c] });
     }
-    document.getElementById('auto-detect-info').innerHTML =
-      `未检测到合并表头，已将每列作为独立维度。可手动调整。`;
+    document.getElementById('auto-detect-info').innerHTML = `未检测到合并表头，已将每列作为独立维度。可手动调整。`;
   }
-
   renderDims();
 }
 
 function renderDims() {
-  const { sheetData, merges: fileMerges } = primaryData();
-  const subHeaders = getEffectiveHeadersFor(sheetData, fileMerges);
-  const nameCol = getNameCol();
-  const numCols = Math.max(...sheetData.slice(0, getHeaderRows() + 1).map(r => (r||[]).length), 0);
-
+  const f = primaryFile();
+  const { sheetData, merges, hRows, nameCol } = f;
+  const subHeaders = getEffectiveHeadersFor(sheetData, merges, hRows);
+  const numCols = Math.max(...sheetData.slice(0, hRows + 1).map(r => (r||[]).length), 0);
   const assigned = new Set(dims.flatMap(d => d.cols));
 
   const pool = document.getElementById('cols-pool');
@@ -462,7 +384,6 @@ function renderDims() {
     const chip = document.createElement('span');
     chip.className = 'pool-chip' + (assigned.has(c) ? ' used' : '');
     chip.textContent = subHeaders[c];
-    chip.dataset.col = c;
     if (!assigned.has(c)) chip.onclick = () => assignToLastDim(c);
     pool.appendChild(chip);
   }
@@ -472,87 +393,58 @@ function renderDims() {
   dims.forEach((d, di) => {
     const card = document.createElement('div');
     card.className = 'dim-card';
-
-    const header = document.createElement('div');
-    header.className = 'dim-card-header';
-    const inp = document.createElement('input');
-    inp.className = 'dim-name-input';
-    inp.value = d.name;
+    const hdr = document.createElement('div'); hdr.className = 'dim-card-header';
+    const inp = document.createElement('input'); inp.className = 'dim-name-input'; inp.value = d.name;
     inp.oninput = e => { dims[di].name = e.target.value; };
-    const del = document.createElement('button');
-    del.className = 'btn-del-dim';
-    del.textContent = '×';
+    const del = document.createElement('button'); del.className = 'btn-del-dim'; del.textContent = '×';
     del.onclick = () => { dims.splice(di, 1); renderDims(); };
-    header.appendChild(inp);
-    header.appendChild(del);
-    card.appendChild(header);
+    hdr.appendChild(inp); hdr.appendChild(del); card.appendChild(hdr);
 
-    const chips = document.createElement('div');
-    chips.className = 'col-chips';
+    const chips = document.createElement('div'); chips.className = 'col-chips';
     for (let c = 0; c < numCols; c++) {
       if (c === nameCol) continue;
       const chip = document.createElement('span');
-      const isOn = d.cols.includes(c);
-      chip.className = 'col-chip ' + (isOn ? 'on' : 'off');
+      chip.className = 'col-chip ' + (d.cols.includes(c) ? 'on' : 'off');
       chip.textContent = subHeaders[c];
       chip.onclick = () => {
-        if (d.cols.includes(c)) {
-          dims[di].cols = dims[di].cols.filter(x => x !== c);
-        } else {
-          dims.forEach((od, oi) => { if (oi !== di) dims[oi].cols = od.cols.filter(x => x !== c); });
-          dims[di].cols.push(c);
-        }
+        if (d.cols.includes(c)) dims[di].cols = dims[di].cols.filter(x => x !== c);
+        else { dims.forEach((od, oi) => { if (oi !== di) dims[oi].cols = od.cols.filter(x => x !== c); }); dims[di].cols.push(c); }
         renderDims();
       };
       chips.appendChild(chip);
     }
-    card.appendChild(chips);
-    grid.appendChild(card);
+    card.appendChild(chips); grid.appendChild(card);
   });
 }
 
 function assignToLastDim(c) {
-  if (dims.length === 0) addDim();
+  if (!dims.length) addDim();
   const last = dims[dims.length - 1];
-  if (!last.cols.includes(c)) {
-    dims.forEach(d => { d.cols = d.cols.filter(x => x !== c); });
-    last.cols.push(c);
-    renderDims();
-  }
+  if (!last.cols.includes(c)) { dims.forEach(d => { d.cols = d.cols.filter(x => x !== c); }); last.cols.push(c); renderDims(); }
 }
+function addDim() { dims.push({ name: '新维度', cols: [] }); renderDims(); }
 
-function addDim() {
-  dims.push({ name: '新维度', cols: [] });
-  renderDims();
-}
-
-// ─── Step 4: Analyze all files ───────────────────────────
+// ─── Step 4: Analyze – each file uses its own hRows/nameCol ──
 function analyze() {
-  if (dims.length === 0) { showToast('请至少添加一个统计维度'); return; }
-
+  if (!dims.length) { showToast('请至少添加一个统计维度'); return; }
   const wrap = document.getElementById('result-wrap');
   wrap.innerHTML = '';
-
   let anyData = false;
 
   files.forEach((fileEntry, fi) => {
-    const { sheetData } = fileEntry;
-    const hRows = getHeaderRows();
-    const nameCol = getNameCol();
+    const { sheetData, merges, hRows, nameCol } = fileEntry;
     const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
     const total = dataRows.length;
-    if (total === 0) return;
+    if (!total) return;
     anyData = true;
 
+    const subHdrs = getEffectiveHeadersFor(sheetData, merges, hRows);
     const results = dims
       .filter(d => d.cols.length > 0)
       .map(d => {
         const count = dataRows.filter(row => d.cols.some(c => getCellValue(row, c) !== null)).length;
         const subs = d.cols.length > 1
-          ? d.cols.map(c => ({
-              name: (getEffectiveHeadersFor(sheetData, fileEntry.merges)[c]) || ('列' + (c + 1)),
-              count: dataRows.filter(row => getCellValue(row, c) !== null).length
-            }))
+          ? d.cols.map(c => ({ name: subHdrs[c] || ('列'+(c+1)), count: dataRows.filter(row => getCellValue(row,c) !== null).length }))
           : [];
         return { name: d.name, count, subs };
       })
@@ -560,125 +452,123 @@ function analyze() {
 
     const maxCount = results[0]?.count || 1;
     const tblId = 'rtbl-' + fi;
-
     const block = document.createElement('div');
     block.className = 'result-block';
 
-    // Header row with title + actions
-    const blockHeader = document.createElement('div');
-    blockHeader.className = 'result-block-header';
-
+    const blockHdr = document.createElement('div'); blockHdr.className = 'result-block-header';
     const titleWrap = document.createElement('div');
-    titleWrap.innerHTML = `
-      <div class="result-block-title">${esc(fileEntry.name)}</div>
-      <div class="result-block-subtitle">共 ${total} 份试卷</div>
-    `;
-    blockHeader.appendChild(titleWrap);
+    titleWrap.innerHTML = `<div class="result-block-title">${esc(fileEntry.name)}</div><div class="result-block-subtitle">共 ${total} 份试卷</div>`;
+    const actWrap = document.createElement('div'); actWrap.className = 'result-actions';
+    actWrap.innerHTML = `<button class="btn btn-secondary btn-sm" onclick="copyResult('${tblId}')">复制表格</button>
+      <button class="btn btn-primary btn-sm" onclick="openInChartGenerator(${fi})">在图表生成器中打开 →</button>`;
+    blockHdr.appendChild(titleWrap); blockHdr.appendChild(actWrap);
+    block.appendChild(blockHdr);
 
-    const actionsWrap = document.createElement('div');
-    actionsWrap.className = 'result-actions';
-    actionsWrap.innerHTML = `
-      <button class="btn btn-secondary btn-sm" onclick="copyResult('${tblId}')">复制表格</button>
-      <button class="btn btn-primary btn-sm" onclick="openInChartGenerator(${fi})">在图表生成器中打开 →</button>
-    `;
-    blockHeader.appendChild(actionsWrap);
-    block.appendChild(blockHeader);
-
-    // Table
     let html = `<table class="result-tbl" id="${tblId}"><thead><tr>
-      <th>排名</th><th>维度</th><th>考查套数</th><th>考频</th><th>可视化</th>
-    </tr></thead><tbody>`;
-
+      <th>排名</th><th>维度</th><th>考查套数</th><th>考频</th><th>可视化</th></tr></thead><tbody>`;
     results.forEach((r, i) => {
-      const pct = (r.count / total * 100).toFixed(1);
-      const bw = Math.round(r.count / maxCount * 150);
-      const rc = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'r0';
-      html += `<tr style="background:#fff;">
-        <td><span class="rank-badge ${rc}">${i + 1}</span></td>
-        <td><strong>${esc(r.name)}</strong></td>
-        <td>${r.count} / ${total}</td>
-        <td>${pct}%</td>
-        <td><div class="bar-wrap"><div class="bar" style="width:${bw}px"></div><span class="pct">${pct}%</span></div></td>
-      </tr>`;
+      const pct = (r.count/total*100).toFixed(1), bw = Math.round(r.count/maxCount*150);
+      const rc = i===0?'r1':i===1?'r2':i===2?'r3':'r0';
+      html += `<tr style="background:#fff;"><td><span class="rank-badge ${rc}">${i+1}</span></td>
+        <td><strong>${esc(r.name)}</strong></td><td>${r.count} / ${total}</td><td>${pct}%</td>
+        <td><div class="bar-wrap"><div class="bar" style="width:${bw}px"></div><span class="pct">${pct}%</span></div></td></tr>`;
       r.subs.forEach(s => {
-        const sp = (s.count / total * 100).toFixed(1);
-        const sbw = Math.round(s.count / maxCount * 150);
-        html += `<tr style="background:#f9faff;">
-          <td></td>
+        const sp=(s.count/total*100).toFixed(1), sbw=Math.round(s.count/maxCount*150);
+        html+=`<tr style="background:#f9faff;"><td></td>
           <td style="padding-left:28px;color:#666;font-size:13px;">└ ${esc(s.name)}</td>
           <td style="color:#666;font-size:13px;">${s.count} / ${total}</td>
           <td style="color:#666;font-size:13px;">${sp}%</td>
-          <td><div class="bar-wrap"><div class="bar" style="width:${sbw}px;background:#a0bffa;height:6px;"></div><span class="pct">${sp}%</span></div></td>
-        </tr>`;
+          <td><div class="bar-wrap"><div class="bar" style="width:${sbw}px;background:#a0bffa;height:6px;"></div><span class="pct">${sp}%</span></div></td></tr>`;
       });
     });
     html += '</tbody></table>';
-
-    const tblWrap = document.createElement('div');
-    tblWrap.innerHTML = html;
-    block.appendChild(tblWrap);
-
-    // Divider between files
-    if (fi < files.length - 1) {
-      const divider = document.createElement('div');
-      divider.className = 'result-divider';
-      block.appendChild(divider);
-    }
-
+    const tw = document.createElement('div'); tw.innerHTML = html;
+    block.appendChild(tw);
+    if (fi < files.length - 1) { const dv = document.createElement('div'); dv.className = 'result-divider'; block.appendChild(dv); }
     wrap.appendChild(block);
   });
 
-  if (!anyData) { showToast('所有文件均未找到数据行，请检查"表头共几行"设置'); return; }
-
-  document.getElementById('result-title').textContent =
-    files.length === 1 ? '统计结果' : `统计结果（共 ${files.length} 个文件）`;
-
+  if (!anyData) { showToast('所有文件均未找到数据行，请检查表头行数设置'); return; }
+  document.getElementById('result-title').textContent = files.length === 1 ? '统计结果' : `统计结果（共 ${files.length} 个文件）`;
   document.getElementById('step4-card').classList.remove('hidden');
   document.getElementById('step4-card').scrollIntoView({ behavior: 'smooth' });
 }
 
 function copyResult(tblId) {
-  const tbl = document.getElementById(tblId);
-  if (!tbl) return;
+  const tbl = document.getElementById(tblId); if (!tbl) return;
   let txt = '排名\t维度\t考查套数\t考频\n';
   for (const row of tbl.rows) {
     if (row.rowIndex === 0) continue;
-    const cells = Array.from(row.cells).slice(0, 4).map(c => c.textContent.trim().replace(/\s+/g,' '));
-    txt += cells.join('\t') + '\n';
+    txt += Array.from(row.cells).slice(0,4).map(c=>c.textContent.trim().replace(/\s+/g,' ')).join('\t') + '\n';
   }
   navigator.clipboard.writeText(txt).then(() => showToast('已复制，可直接粘贴到 Excel'));
 }
 
 function openInChartGenerator(fileIdx) {
-  const fileEntry = files[fileIdx];
-  const { sheetData } = fileEntry;
-  const hRows = getHeaderRows();
-  const nameCol = getNameCol();
-  const dataRows = sheetData.slice(hRows).filter(r => r && getCellValue(r, nameCol) !== null);
+  const f = files[fileIdx];
+  const dataRows = f.sheetData.slice(f.hRows).filter(r => r && getCellValue(r, f.nameCol) !== null);
   const total = dataRows.length;
-
-  const mainResults = dims
-    .filter(d => d.cols.length > 0)
-    .map(d => ({
-      name: d.name,
-      value: parseFloat((dataRows.filter(row => d.cols.some(c => getCellValue(row, c) !== null)).length / total * 100).toFixed(1))
-    }))
-    .sort((a, b) => b.value - a.value);
-
-  const payload = {
-    title: '各维度考频统计',
-    labels: mainResults.map(r => r.name),
-    values: mainResults.map(r => r.value)
-  };
-
-  const url = 'https://web-production-44f58.up.railway.app?data=' + encodeURIComponent(JSON.stringify(payload));
-  window.open(url, '_blank');
+  const mainResults = dims.filter(d=>d.cols.length>0)
+    .map(d=>({ name:d.name, value:parseFloat((dataRows.filter(row=>d.cols.some(c=>getCellValue(row,c)!==null)).length/total*100).toFixed(1)) }))
+    .sort((a,b)=>b.value-a.value);
+  const payload = { title:'各维度考频统计', labels:mainResults.map(r=>r.name), values:mainResults.map(r=>r.value) };
+  window.open('https://web-production-44f58.up.railway.app?data='+encodeURIComponent(JSON.stringify(payload)),'_blank');
 }
+
+// ─── Helpers ─────────────────────────────────────────────
+function getMergeSpanFor(mergesArr, r, c) {
+  for (const m of mergesArr) {
+    if (m.s.r===r && m.s.c===c) return { colspan:m.e.c-m.s.c+1, rowspan:m.e.r-m.s.r+1 };
+    if (r>=m.s.r && r<=m.e.r && c>=m.s.c && c<=m.e.c) return null;
+  }
+  return { colspan:1, rowspan:1 };
+}
+
+function getEffectiveHeadersFor(sheetData, mergesArr, hRows) {
+  const numCols = Math.max(...sheetData.slice(0, hRows+1).map(r=>(r||[]).length), 0);
+  const labels = [];
+  for (let c = 0; c < numCols; c++) {
+    let label = null;
+    for (let r = hRows-1; r >= 0; r--) {
+      const v = (sheetData[r]||[])[c];
+      if (v!=null && String(v).trim()!=='') { label=String(v).trim(); break; }
+    }
+    if (label===null) {
+      outer: for (const m of mergesArr) {
+        if (m.e.r<hRows && c>=m.s.c && c<=m.e.c) {
+          const v=(sheetData[m.s.r]||[])[m.s.c];
+          if (v!=null) { label=String(v).trim(); break outer; }
+        }
+      }
+    }
+    labels.push(label||('列'+(c+1)));
+  }
+  return labels;
+}
+
+function getTopLevelLabelFor(sheetData, mergesArr, colIdx) {
+  const v0 = (sheetData[0]||[])[colIdx];
+  if (v0!=null && String(v0).trim()!=='') return String(v0).trim();
+  for (const m of mergesArr) {
+    if (m.s.r===0 && colIdx>=m.s.c && colIdx<=m.e.c) {
+      const mv=(sheetData[0]||[])[m.s.c];
+      if (mv!=null) return String(mv).trim();
+    }
+  }
+  return null;
+}
+
+function getCellValue(row, c) {
+  if (!row) return null;
+  const v = row[c];
+  if (v===null||v===undefined||String(v).trim()==='') return null;
+  return v;
+}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 </script>
