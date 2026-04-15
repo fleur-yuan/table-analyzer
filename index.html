@@ -164,16 +164,29 @@ let files = [];
 // ─── Upload ──────────────────────────────────────────────
 const uz = document.getElementById('upload-zone');
 const fi = document.getElementById('file-input');
-uz.onclick = () => fi.click();
-uz.ondragover = e => { e.preventDefault(); e.stopPropagation(); uz.classList.add('drag-over'); };
-uz.ondragleave = e => { if (!uz.contains(e.relatedTarget)) uz.classList.remove('drag-over'); };
-uz.ondrop = e => {
-  e.preventDefault(); e.stopPropagation(); uz.classList.remove('drag-over');
+
+uz.addEventListener('click', () => fi.click());
+
+['dragenter','dragover'].forEach(evt => {
+  uz.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); uz.classList.add('drag-over'); });
+});
+uz.addEventListener('dragleave', e => {
+  e.preventDefault();
+  if (!uz.contains(e.relatedTarget)) uz.classList.remove('drag-over');
+});
+uz.addEventListener('drop', e => {
+  e.preventDefault(); e.stopPropagation();
+  uz.classList.remove('drag-over');
   const dropped = Array.from(e.dataTransfer.files).filter(f => /\.xlsx?$/i.test(f.name));
   if (dropped.length) loadFiles(dropped);
   else showToast('请拖入 .xlsx 或 .xls 文件');
-};
-fi.onchange = e => { loadFiles(Array.from(e.target.files)); fi.value = ''; };
+});
+
+// Also allow drop on entire document to avoid "forbidden" cursor
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => e.preventDefault());
+
+fi.addEventListener('change', e => { loadFiles(Array.from(e.target.files)); fi.value = ''; });
 
 function loadFiles(newFiles) {
   newFiles.forEach(file => {
